@@ -1,18 +1,13 @@
 package assignments.assignment1;
 
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
-public class OrderGenerator {
+public class OrderGenerator { 
     private static final Scanner input = new Scanner(System.in);
+    private static final Pattern DATE_PATTERN = Pattern.compile("^\\d{2}/\\d{2}/\\d{4}$");  // Pattern for the date
 
-    /* 
-    Anda boleh membuat method baru sesuai kebutuhan Anda
-    Namun, Anda tidak boleh menghapus ataupun memodifikasi return type method yang sudah ada.
-    */
 
-    /*
-     * Method  ini untuk menampilkan menu
-     */
     public static void showMenu(){
         System.out.println(">>=======================================<<");
         System.out.println("|| ___                 ___             _ ||");
@@ -26,39 +21,62 @@ public class OrderGenerator {
         System.err.println("1. Generate Order ID");
         System.out.println("2. Generate Bill");
         System.out.println("3. Keluar");
+
+        System.out.println("-------------------------------------");
     }
 
-    /*
-     * Method ini digunakan untuk membuat ID
-     * dari nama restoran, tanggal order, dan nomor telepon
-     * 
-     * @return String Order ID dengan format sesuai pada dokumen soal
-     */
     public static String generateOrderID(String namaRestoran, String tanggalOrder, String noTelepon) {
-        // TODO:Lengkapi method ini sehingga dapat mengenerate Order ID sesuai ketentuan
+        // String orderId = "";
+
         return "TP";
     }
 
-
-    /*
-     * Method ini digunakan untuk membuat bill
-     * dari order id dan lokasi
-     * 
-     * @return String Bill dengan format sesuai di bawah:
-     *          Bill:
-     *          Order ID: [Order ID]
-     *          Tanggal Pemesanan: [Tanggal Pemesanan]
-     *          Lokasi Pengiriman: [Kode Lokasi]
-     *          Biaya Ongkos Kirim: [Total Ongkos Kirim]
-     */
     public static String generateBill(String OrderID, String lokasi){
-        // TODO:Lengkapi method ini sehingga dapat mengenerate Bill sesuai ketentuan
         return "Bill";
     }
 
     public static void main(String[] args) {
-        // TODO: Implementasikan program sesuai ketentuan yang diberikan
-    }
+        String selectMenu;
+        String inputResto;
+        String inputTp; // Use String because matcher is must use String
+        String noTelp;
 
+        showMenu();
+        System.out.print("Pilihan menu:");
+        System.out.print(" ");
+        while (true) {
+            selectMenu = input.nextLine();
+            if(selectMenu.equals("3")) {
+                System.out.println("Terimakasih telah menggunakan DepeFood!");
+                break;
+            } else if(selectMenu.equals("1")) {
+                while (true) {
+                    System.out.print("Nama Restoran: ");
+                    inputResto = input.nextLine();
+                    if (inputResto.length() < 4) {
+                        System.out.println("Nama Restoran tidak valid!");
+                        continue; // Mengulangi loop untuk meminta input nama restoran lagi
+                    }
     
+                    System.out.print("Tanggal Pemesanan: ");
+                    inputTp = input.nextLine();
+                    if (!DATE_PATTERN.matcher(inputTp).matches()) {
+                        System.out.println("Tanggal pemesanan dalam format DD/MM/YYYY");
+                        continue; // Mengulangi loop untuk meminta input tanggal pemesanan lagi
+                    }
+    
+                    System.out.print("No. Telpon: ");
+                    noTelp = input.nextLine();
+                    if (!noTelp.matches("\\d+")) { 
+                        System.out.println("Harap masukkan nomor telepon dalam bentuk bilangan bulat positif!");
+                        continue; // Mengulangi loop untuk meminta input nomor telepon lagi
+                    }
+    
+                    // Jika semua input valid, keluar dari loop dan lanjutkan ke menu selanjutnya
+                    break;
+                }
+            }
+        }
+    }
 }
+
