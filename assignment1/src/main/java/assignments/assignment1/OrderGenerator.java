@@ -7,7 +7,7 @@
         private static final Scanner input = new Scanner(System.in);
         private static final Pattern DATE_PATTERN = Pattern.compile("^\\d{2}/\\d{2}/\\d{4}$");  // Pattern for the date
 
-        // Deklarasikan Code 39 Character Set sebagai array
+        // Mendeklarasikan Code 39 Character dengan array
         private static final char[] CODE_39_CHARACTERS = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
         'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
         'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
@@ -102,6 +102,22 @@
             return orderId;
         }
 
+        public static String pilihMenu() {
+            System.out.println("-------------------------------------");
+            System.out.println();
+            System.out.println("Pilih menu:");
+            System.out.println("1. Generate Order ID");
+            System.out.println("2. Generate Bill");
+            System.out.println("3. Keluar");
+
+            System.out.println("-------------------------------------");
+
+            // int menu = Integer.parseInt(input.nextLine());
+            String menu = input.nextLine();
+
+            return menu;
+        }
+
 
         public static boolean validationID(String orderIdWithoutChecksum, String checksumFromInput) {
             // Menghitung checksum
@@ -114,12 +130,6 @@
             return calculatedChecksum.equals(checksumFromInput);
         }
 
-        /* "Bill:\n" + //
-                    "Order ID: HOLY1802202453C3\n" + //
-                    "Tanggal Pemesanan: 18/02/2024\n" + //
-                    "Lokasi Pengiriman: S\n" + //
-                    "Biaya Ongkos Kirim: Rp 40.000\n" + //
-                    ""; */
         public static String generateBill(String OrderID, String lokasi){
             String harga = "0";
                 switch (lokasi.toUpperCase()) {
@@ -169,8 +179,9 @@
             showMenu();
             System.out.print("Pilihan menu:");
             System.out.print(" ");
+            selectMenu = input.nextLine();
+
             while (true) {
-                selectMenu = input.nextLine();
                 if(selectMenu.equals("3")) {
                     System.out.println("Terimakasih telah menggunakan DepeFood!");
                     break;
@@ -203,7 +214,9 @@
 
                     // Generate Order ID pesanan 
                     String orderId = generateOrderID(inputResto, inputTp, noTelp);
-                    System.out.println("Order ID " + orderId.toUpperCase());
+                    System.out.println("Order ID " + orderId.toUpperCase() + " diterima!");
+
+                    pilihMenu();
 
                 } else if (selectMenu.equals("2")) {
                     while (true) {
@@ -224,7 +237,7 @@
                     }
 
                     System.out.print("Lokasi pengiriman: ");
-                    inputAlamat = input.nextLine();
+                    inputAlamat = input.nextLine().toUpperCase();
                     if (!inputAlamat.equals("P") && !inputAlamat.equals("U") && !inputAlamat.equals("T") && !inputAlamat.equals("S") && !inputAlamat.equals("B")) {
                         System.out.println("Harap masukkan lokasi pengiriman yang ada pada jangkauan!");
                         continue;
