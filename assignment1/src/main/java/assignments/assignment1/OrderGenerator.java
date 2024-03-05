@@ -50,6 +50,7 @@
             String orderId = "";
 
             // 1. (ORDER ID 1-4) Jika panjang inputRestonya >= 4, maka ambil bagian 4 string pertama
+            namaRestoran = namaRestoran.toUpperCase();
             if (namaRestoran.length() >= 4) {       
                 orderId = namaRestoran.substring(0,4);
             }
@@ -132,8 +133,9 @@
 
         // Mencetak  bill
         public static String generateBill(String OrderID, String lokasi){
+            lokasi = lokasi.toUpperCase();
             String harga = "0"; // Declare harga dari 0
-                switch (lokasi.toUpperCase()) { 
+                switch (lokasi) { 
                     case "P":
                         harga = "10.000";
                         break;
@@ -155,14 +157,14 @@
                 }
             
             // Membuat outputnya
-            String date = "Tanggal Pemesanan: " + OrderID.substring(4, 6) + "/" + OrderID.substring(6, 8) + "/" + OrderID.substring(8, 12);
-            String lokPengiriman = "Lokasi Pengiriman: " + lokasi;
-            String biayaOngkos = "Biaya Ongkos Kirim: Rp." + harga;
+            String date = OrderID.substring(4, 6) + "/" + OrderID.substring(6, 8) + "/" + OrderID.substring(8, 12);
+            // String lokPengiriman = "Lokasi Pengiriman: " + lokasi;
+            // String biayaOngkos = "Biaya Ongkos Kirim: Rp." + harga;
             String solution = "Bill:\n" + //
                 "Order ID: " + OrderID + "\n" + //
                 "Tanggal Pemesanan: " + date + "\n" + //
-                "Lokasi Pengiriman: " + lokPengiriman + "\n" + //
-                "Biaya Ongkos Kirim:" + biayaOngkos + "\n" + //
+                "Lokasi Pengiriman: " + lokasi + "\n" + //
+                "Biaya Ongkos Kirim: Rp " + harga + "\n" + //
                 "";
             
             return solution;
