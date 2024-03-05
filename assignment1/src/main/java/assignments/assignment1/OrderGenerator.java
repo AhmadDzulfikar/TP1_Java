@@ -23,7 +23,7 @@
             System.out.println(">>=======================================<<");
             System.out.println();
             System.out.println("Pilih menu:");
-            System.err.println("1. Generate Order ID");
+            System.out.println("1. Generate Order ID");
             System.out.println("2. Generate Bill");
             System.out.println("3. Keluar");
 
