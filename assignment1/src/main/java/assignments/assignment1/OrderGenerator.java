@@ -44,7 +44,7 @@
 
             return menu;
         }
-
+ 
         // Untuk membuat Order IDnya
         public static String generateOrderID(String namaRestoran, String tanggalOrder, String noTelepon) {
             String orderId = "";
@@ -249,7 +249,7 @@
                     // Input lokasi pengiriman
                     System.out.print("Lokasi pengiriman: ");
                     inputAlamat = input.nextLine().toUpperCase();   // Agar ketika input huruf kecil akan otomatis ke capslock
-                    if (!inputAlamat.equals("P") && !inputAlamat.equals("U") || !inputAlamat.equals("T") || !inputAlamat.equals("S") || !inputAlamat.equals("B")) {
+                    if (!inputAlamat.equals("P") || !inputAlamat.equals("U") || !inputAlamat.equals("T") || !inputAlamat.equals("S") || !inputAlamat.equals("B")) {
                         System.out.println("Harap masukkan lokasi pengiriman yang ada pada jangkauan!");
                         continue;
                     }
