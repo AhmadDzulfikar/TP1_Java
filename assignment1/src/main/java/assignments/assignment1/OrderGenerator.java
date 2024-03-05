@@ -155,19 +155,17 @@
                 }
             
             // Membuat outputnya
-            String bill = "Bill: \n";
-            bill += String.format("Order ID: %s \n", OrderID);
-
-            String date = "Tanggal Pemesanan: " + OrderID.substring(4, 6) + "/" + OrderID.substring(6, 8) + "/" + OrderID.substring(8, 12) + "\n";
-            bill += date;
-
-            String lokPengiriman = "Lokasi Pengiriman: " + lokasi + '\n';
-            bill += lokPengiriman;
-
+            String date = "Tanggal Pemesanan: " + OrderID.substring(4, 6) + "/" + OrderID.substring(6, 8) + "/" + OrderID.substring(8, 12);
+            String lokPengiriman = "Lokasi Pengiriman: " + lokasi;
             String biayaOngkos = "Biaya Ongkos Kirim: Rp." + harga;
-            bill += biayaOngkos;
+            String solution = "Bill:\n" + //
+                "Order ID: " + OrderID + "\n" + //
+                "Tanggal Pemesanan: " + date + "\n" + //
+                "Lokasi Pengiriman: " + lokPengiriman + "\n" + //
+                "Biaya Ongkos Kirim:" + biayaOngkos + "\n" + //
+                "";
             
-            return bill;
+            return solution;
     }
 
         public static void main(String[] args) {
@@ -251,8 +249,8 @@
                     }
 
                     // String bill = generateBill(orderIdWithoutChecksum, checksumFromInput);
-                    String bill = generateBill(inputOrder, inputAlamat);
-                    System.out.println(bill);
+                    String solution = generateBill(inputOrder, inputAlamat);
+                    System.out.println(solution);
                     pilihMenu();
                     break;
                 }
