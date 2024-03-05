@@ -13,7 +13,7 @@
         'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
         'U', 'V', 'W', 'X', 'Y', 'Z'};
 
-        public static void showMenu(){
+        public static void showMenu(){                                                  // Menampilkan output menu
             System.out.println(">>=======================================<<");
             System.out.println("|| ___                 ___             _ ||");
             System.err.println("||| . \\ ___  ___  ___ | __>___  ___  _| |||");
@@ -30,6 +30,22 @@
             System.out.println("-------------------------------------");
         }
 
+        public static String pilihMenu() {
+            System.out.println("-------------------------------------");
+            System.out.println("Pilih menu:");
+            System.out.println("1. Generate Order ID");
+            System.out.println("2. Generate Bill");
+            System.out.println("3. Keluar");
+
+            System.out.println("-------------------------------------");
+
+            // int menu = Integer.parseInt(input.nextLine());
+            String menu = input.nextLine();
+
+            return menu;
+        }
+
+        // Untuk membuat Order IDnya
         public static String generateOrderID(String namaRestoran, String tanggalOrder, String noTelepon) {
             String orderId = "";
 
@@ -102,37 +118,22 @@
             return orderId;
         }
 
-        public static String pilihMenu() {
-            System.out.println("-------------------------------------");
-            System.out.println();
-            System.out.println("Pilih menu:");
-            System.out.println("1. Generate Order ID");
-            System.out.println("2. Generate Bill");
-            System.out.println("3. Keluar");
-
-            System.out.println("-------------------------------------");
-
-            // int menu = Integer.parseInt(input.nextLine());
-            String menu = input.nextLine();
-
-            return menu;
-        }
-
-
+        // Untuk membuat validasi 2 digit terakhir ketika di bagian inputOrderID
         public static boolean validationID(String orderIdWithoutChecksum, String checksumFromInput) {
-            // Menghitung checksum
+            // Menghitung checksumnya
             String checksum = calculateChecksum(orderIdWithoutChecksum);
         
-            // Mendapatkan checksum dari hasil perhitungan
+            // Mendapatkan checksum hasil dari perhitungan
             String calculatedChecksum = checksum.substring(checksum.length() - 2);
         
-            // Bandingkan checksum dari input dengan checksum yang dihitung
+            // Membandingkan checksum input dengan checksum yang dihitung
             return calculatedChecksum.equals(checksumFromInput);
         }
 
+        // Mencetak  bill
         public static String generateBill(String OrderID, String lokasi){
-            String harga = "0";
-                switch (lokasi.toUpperCase()) {
+            String harga = "0"; // Declare harga dari 0
+                switch (lokasi) { 
                     case "P":
                         harga = "10.000";
                         break;
@@ -152,7 +153,8 @@
                     System.out.println("Harap masukkan lokasi pengiriman yang ada pada jangkauan!");
                         break;
                 }
-
+            
+            // Membuat outputnya
             String bill = "Bill: \n";
             bill += String.format("Order ID: %s \n", OrderID);
 
@@ -169,6 +171,7 @@
     }
 
         public static void main(String[] args) {
+            // Mendeklarasikan variabel
             String selectMenu;
             String inputResto;
             String inputTp; // Use String because matcher is must use String
@@ -176,29 +179,32 @@
             String inputOrder;
             String inputAlamat;
 
+            // Menampilkan menunya dan inputan untuk pilih menu
             showMenu();
             System.out.print("Pilihan menu:");
             System.out.print(" ");
             selectMenu = input.nextLine();
 
             while (true) {
-                if(selectMenu.equals("3")) {
+                // 3. EXIT ----------------------------------------------------------------------------------------------
+                if(selectMenu.equals("3")) {    // Kalau pilih angka 3 maka akan keluar dari program
                     System.out.println("Terimakasih telah menggunakan DepeFood!");
                     break;
-                } else if(selectMenu.equals("1")) {
+                // 1. GENERATE ORDER ID -------------------------------------------------------------------------------------
+                } else if(selectMenu.equals("1")) { // Kalau pilih angka 1 maka akan lanjut untuk membuat Order ID
                     while (true) {
-                        System.out.print("Nama Restoran: ");
+                        System.out.print("Nama Restoran: ");   
                         inputResto = input.nextLine();
                         if (inputResto.length() < 4) {
                             System.out.println("Nama Restoran tidak valid!");
-                            continue; // Mengulangi loop untuk meminta input nama restoran lagi
+                            continue; // Looping untuk meminta input nama restoran lagi
                         }
         
                         System.out.print("Tanggal Pemesanan: ");
                         inputTp = input.nextLine();
                         if (!DATE_PATTERN.matcher(inputTp).matches()) {
                             System.out.println("Tanggal pemesanan dalam format DD/MM/YYYY");
-                            continue; // Mengulangi loop untuk meminta input tanggal pemesanan lagi
+                            continue; // Looping untuk meminta input tanggal pemesanan lagi
                         }
         
                         System.out.print("No. Telpon: ");
@@ -217,28 +223,33 @@
                     System.out.println("Order ID " + orderId.toUpperCase() + " diterima!");
 
                     pilihMenu();
+                    System.out.print("Pilihan menu:");
+                    System.out.print(" ");
+                    selectMenu = input.nextLine();
 
+                    // GENERATE BILL ------------------------------------------------------------------------------------------
                 } else if (selectMenu.equals("2")) {
                     while (true) {
                         System.out.print("Order ID: ");
                         inputOrder = input.nextLine();
                         if (inputOrder.length() < 16) {
                         System.out.println("Order ID minimal 16 karakter");
-                        continue; // Mengulangi loop untuk meminta input order ID lagi
+                        continue; // Looping untuk meminta input order ID lagi
                     }
 
-                    String orderIdWithoutChecksum = inputOrder.substring(0, 14); // Ambil 14 karakter pertama
-                    String checksumFromInput = inputOrder.substring(14, 16); // Ambil 2 karakter terakhir
+                    String orderIdWithoutChecksum = inputOrder.substring(0, 14); // Mengambil 14 karakter pertama
+                    String checksumFromInput = inputOrder.substring(14, 16); // Mengambil 2 karakter terakhir
 
-                    // Lakukan validasi checksum
+                    // Untuk melakukan validasi checksum
                     if (!validationID(orderIdWithoutChecksum, checksumFromInput)) {
                         System.out.println("Silahkan masukkan order ID yang valid!");
                         continue; // Mengulangi loop untuk meminta input order ID lagi
                     }
 
+                    // Input lokasi pengiriman
                     System.out.print("Lokasi pengiriman: ");
-                    inputAlamat = input.nextLine().toUpperCase();
-                    if (!inputAlamat.equals("P") && !inputAlamat.equals("U") && !inputAlamat.equals("T") && !inputAlamat.equals("S") && !inputAlamat.equals("B")) {
+                    inputAlamat = input.nextLine().toUpperCase();   // Agar ketika input huruf kecil akan otomatis ke capslock
+                    if (!inputAlamat.equals("P") && !inputAlamat.equals("U") || !inputAlamat.equals("T") || !inputAlamat.equals("S") || !inputAlamat.equals("B")) {
                         System.out.println("Harap masukkan lokasi pengiriman yang ada pada jangkauan!");
                         continue;
                     }
@@ -246,7 +257,14 @@
                     // String bill = generateBill(orderIdWithoutChecksum, checksumFromInput);
                     String bill = generateBill(inputOrder, inputAlamat);
                     System.out.println(bill);
+                    
+                    pilihMenu();
+                    System.out.print("Pilihan menu:");
+                    System.out.print(" ");
+                    selectMenu = input.nextLine();
                 }
+                
+
 
             }
         }
