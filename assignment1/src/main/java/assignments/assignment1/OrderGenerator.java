@@ -30,7 +30,7 @@
             System.out.println("-------------------------------------");
         }
 
-        public static String pilihMenu() {
+        public static void pilihMenu() {
             System.out.println("-------------------------------------");
             System.out.println("Pilih menu:");
             System.out.println("1. Generate Order ID");
@@ -40,9 +40,9 @@
             System.out.println("-------------------------------------");
 
             // int menu = Integer.parseInt(input.nextLine());
-            String menu = input.nextLine();
+            // String menu = input.nextLine();
 
-            return menu;
+            // return menu;
         }
  
         // Untuk membuat Order IDnya
@@ -133,7 +133,7 @@
         // Mencetak  bill
         public static String generateBill(String OrderID, String lokasi){
             String harga = "0"; // Declare harga dari 0
-                switch (lokasi) { 
+                switch (lokasi.toUpperCase()) { 
                     case "P":
                         harga = "10.000";
                         break;
@@ -181,11 +181,11 @@
 
             // Menampilkan menunya dan inputan untuk pilih menu
             showMenu();
-            System.out.print("Pilihan menu:");
-            System.out.print(" ");
-            selectMenu = input.nextLine();
-
+            
             while (true) {
+                System.out.print("Pilihan menu:");
+                System.out.print(" ");
+                selectMenu = input.nextLine();
                 // 3. EXIT ----------------------------------------------------------------------------------------------
                 if(selectMenu.equals("3")) {    // Kalau pilih angka 3 maka akan keluar dari program
                     System.out.println("Terimakasih telah menggunakan DepeFood!");
@@ -221,11 +221,7 @@
                     // Generate Order ID pesanan 
                     String orderId = generateOrderID(inputResto, inputTp, noTelp);
                     System.out.println("Order ID " + orderId.toUpperCase() + " diterima!");
-
                     pilihMenu();
-                    System.out.print("Pilihan menu:");
-                    System.out.print(" ");
-                    selectMenu = input.nextLine();
 
                     // GENERATE BILL ------------------------------------------------------------------------------------------
                 } else if (selectMenu.equals("2")) {
@@ -249,7 +245,7 @@
                     // Input lokasi pengiriman
                     System.out.print("Lokasi pengiriman: ");
                     inputAlamat = input.nextLine().toUpperCase();   // Agar ketika input huruf kecil akan otomatis ke capslock
-                    if (!inputAlamat.equals("P") || !inputAlamat.equals("U") || !inputAlamat.equals("T") || !inputAlamat.equals("S") || !inputAlamat.equals("B")) {
+                    if (!inputAlamat.equals("P") && !inputAlamat.equals("U") && !inputAlamat.equals("T") && !inputAlamat.equals("S") && !inputAlamat.equals("B")) {
                         System.out.println("Harap masukkan lokasi pengiriman yang ada pada jangkauan!");
                         continue;
                     }
@@ -257,19 +253,13 @@
                     // String bill = generateBill(orderIdWithoutChecksum, checksumFromInput);
                     String bill = generateBill(inputOrder, inputAlamat);
                     System.out.println(bill);
-                    
                     pilihMenu();
-                    System.out.print("Pilihan menu:");
-                    System.out.print(" ");
-                    selectMenu = input.nextLine();
+                    break;
                 }
-                
-
-
             }
         }
     }
-    }
+}
 
 
 
