@@ -38,13 +38,8 @@
             System.out.println("3. Keluar");
 
             System.out.println("-------------------------------------");
-
-            // int menu = Integer.parseInt(input.nextLine());
-            // String menu = input.nextLine();
-
-            // return menu;
         }
- 
+
         // Untuk membuat Order IDnya
         public static String generateOrderID(String namaRestoran, String tanggalOrder, String noTelepon) {
             String orderId = "";
