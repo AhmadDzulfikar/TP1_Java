@@ -1,4 +1,4 @@
-package main.java.assignments.assignment2;
+package assignments.assignment2;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -11,6 +11,7 @@ public class MainMenu {
 
     public static void main(String[] args) {
         boolean programRunning = true;
+        initUser();
         while(programRunning){
             printHeader();
             startMenu();
@@ -29,7 +30,26 @@ public class MainMenu {
                 User userLoggedIn; // TODO: lengkapi
                 boolean isLoggedIn = true;
 
-                if(userLoggedIn.role == "Customer"){
+                userLoggedIn = getUser(nama, noTelp);
+
+                if (userLoggedIn != null ) {
+                    if (userLoggedIn.getRole().equals("Admin")) {
+                        // Memanggil method menuAdmin() jika pengguna adalah Admin
+                        while (isLoggedIn) {
+                            System.out.println("Selamat Datang Admin");
+                            menuAdmin();
+                            int commandAdmin = input.nextInt();
+                            input.nextLine();
+
+                            switch(commandAdmin){
+                                case 1 -> handleTambahRestoran();
+                                case 2 -> handleHapusRestoran();
+                                case 5 -> isLoggedIn = false;
+                                default -> System.out.println("Perintah tidak diketahui, silakan coba kembali");
+                        }
+                    }
+                } else if(userLoggedIn.getRole().equals("Customer")){
+                // if(userLoggedIn != null && userLoggedIn.getRole().equals("Customer")) {
                     while (isLoggedIn){
                         menuCustomer();
                         int commandCust = input.nextInt();
@@ -44,31 +64,29 @@ public class MainMenu {
                             default -> System.out.println("Perintah tidak diketahui, silakan coba kembali");
                         }
                     }
-                }else{
-                    while (isLoggedIn){
-                        menuAdmin();
-                        int commandAdmin = input.nextInt();
-                        input.nextLine();
-
-                        switch(commandAdmin){
-                            case 1 -> handleTambahRestoran();
-                            case 2 -> handleHapusRestoran();
-                            case 5 -> isLoggedIn = false;
-                            default -> System.out.println("Perintah tidak diketahui, silakan coba kembali");
-                        }
-                    }
+                } else {
+                    System.out.println("Peran pengguna tidak valid");
                 }
-            }else if(command == 2){
-                programRunning = false;
-            }else{
-                System.out.println("Perintah tidak diketahui, silakan periksa kembali.");
+            } else {
+                System.out.println("Pengguna dengan data tersebut tidak ditemukan!");
+                break;
             }
+        } else if (command == 2){
+            programRunning = false;
+        } else {
+            System.out.println("Perintah tidak diketahui, silakan periksa kembali.");
         }
-        System.out.println("\nTerima kasih telah menggunakan DepeFood ^___^");
     }
+    System.out.println("\nTerima kasih telah menggunakan DepeFood ^___^");
+}
 
     public static User getUser(String nama, String nomorTelepon){
         // TODO: Implementasi method untuk mendapat user dari userList
+        for (User user : userList) {
+            if (user.getNama().equals(nama) && user.getNomorTelepon().equals(nomorTelepon)) {
+                return user;
+            }
+        }
         return null;
     }
 
