@@ -2,6 +2,7 @@ package assignments.assignment2;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.StringTokenizer;
 // import assignments.assignment1.*;
 
 public class MainMenu {
@@ -11,6 +12,7 @@ public class MainMenu {
 
     public static void main(String[] args) {
         boolean programRunning = true;
+        restoList = new ArrayList<>(); // Inisialisasi restoList
         initUser();
         while(programRunning){
             printHeader();
@@ -108,7 +110,50 @@ public class MainMenu {
 
     public static void handleTambahRestoran(){
         // TODO: Implementasi method untuk handle ketika admin ingin tambah restoran
+        tambahRestoran();
     }
+    public static void tambahRestoran() {
+        System.out.print("Nama: ");
+        String namaRestoran = input.nextLine();
+
+        System.out.print("Jumlah Makanan: ");
+        int jumlahMakanan = input.nextInt();
+        input.nextLine();
+
+        Restaurant newRestaurant = new Restaurant(namaRestoran); // Membuat instansi baru dari class restaurant 
+
+        for (int i = 0; i < jumlahMakanan; i++) {
+            System.out.print("Nama Makanan dan harga: ");
+            String inputMakanan = input.nextLine();
+        
+        StringTokenizer tokenizer = new StringTokenizer(inputMakanan);
+        String namaMakanan = "";
+        double harga = 0;
+        
+        while (tokenizer.hasMoreTokens()) {
+            String token = tokenizer.nextToken();
+            try {
+                harga = Double.parseDouble(token);
+                break; // Jika token adalah angka, maka berhenti dari loop
+            } catch (NumberFormatException e) {
+                namaMakanan += token + " ";
+            }
+        }
+        
+        // Menghapus spasi ekstra di akhir nama makanan
+        namaMakanan = namaMakanan.trim();
+
+        // Membuat instansi Menu baru
+        Menu newMenu = new Menu(namaMakanan, harga);
+        // Menambahkan menu ke restoran
+        newRestaurant.tambahMenu(newMenu);
+    }
+
+        // Menambahkan restoran baru ke daftar restoran
+        restoList.add(newRestaurant);
+        System.out.println("Restoran " + namaRestoran + "! berhasil terdaftar.");
+    }
+    
 
     public static void handleHapusRestoran(){
         // TODO: Implementasi method untuk handle ketika admin ingin tambah restoran
