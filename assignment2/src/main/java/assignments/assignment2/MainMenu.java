@@ -2,7 +2,6 @@ package assignments.assignment2;
 
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.StringTokenizer;
 // import assignments.assignment1.*;
 
 public class MainMenu {
@@ -11,11 +10,11 @@ public class MainMenu {
     private static ArrayList<User> userList;
 
     public static void main(String[] args) {
-        boolean programRunning = true;
-        restoList = new ArrayList<>(); // Inisialisasi restoList
+        restoList = new ArrayList<>();
         initUser();
+        boolean programRunning = true;
+        printHeader();
         while(programRunning){
-            printHeader();
             startMenu();
             int command = input.nextInt();
             input.nextLine();
@@ -29,29 +28,16 @@ public class MainMenu {
 
                 // TODO: Validasi input login
 
-                User userLoggedIn; // TODO: lengkapi
+                User userLoggedIn = getUser(nama, noTelp);
+                if (userLoggedIn != null) {
+                    System.out.println("Selamat datang " + userLoggedIn.getNama());
+                } else {
+                    System.out.println("Pengguna dengan data tersebut tidak ditemukan!");
+                    continue;
+                }
+
                 boolean isLoggedIn = true;
-
-                userLoggedIn = getUser(nama, noTelp);
-
-                if (userLoggedIn != null ) {
-                    if (userLoggedIn.getRole().equals("Admin")) {
-                        // Memanggil method menuAdmin() jika pengguna adalah Admin
-                        while (isLoggedIn) {
-                            System.out.println("Selamat Datang Admin");
-                            menuAdmin();
-                            int commandAdmin = input.nextInt();
-                            input.nextLine();
-
-                            switch(commandAdmin){
-                                case 1 -> handleTambahRestoran();
-                                case 2 -> handleHapusRestoran();
-                                case 5 -> isLoggedIn = false;
-                                default -> System.out.println("Perintah tidak diketahui, silakan coba kembali");
-                        }
-                    }
-                } else if(userLoggedIn.getRole().equals("Customer")){
-                // if(userLoggedIn != null && userLoggedIn.getRole().equals("Customer")) {
+                if(userLoggedIn.getRole().equals("Customer")){
                     while (isLoggedIn){
                         menuCustomer();
                         int commandCust = input.nextInt();
@@ -66,30 +52,39 @@ public class MainMenu {
                             default -> System.out.println("Perintah tidak diketahui, silakan coba kembali");
                         }
                     }
-                } else {
-                    System.out.println("Peran pengguna tidak valid");
+                }else{
+                    while (isLoggedIn){
+                        menuAdmin();
+                        int commandAdmin = input.nextInt();
+                        input.nextLine();
+
+                        switch(commandAdmin){
+                            case 1 -> handleTambahRestoran();
+                            case 2 -> handleHapusRestoran();
+                            case 5 -> isLoggedIn = false;
+                            default -> System.out.println("Perintah tidak diketahui, silakan coba kembali");
+                        }
+                    }
                 }
-            } else {
-                System.out.println("Pengguna dengan data tersebut tidak ditemukan!");
-                break;
+            }else if(command == 2){
+                programRunning = false;
+            }else{
+                System.out.println("Perintah tidak diketahui, silakan periksa kembali.");
             }
-        } else if (command == 2){
-            programRunning = false;
-        } else {
-            System.out.println("Perintah tidak diketahui, silakan periksa kembali.");
         }
+        System.out.println("\nTerima kasih telah menggunakan DepeFood ^___^");
     }
-    System.out.println("\nTerima kasih telah menggunakan DepeFood ^___^");
-}
 
     public static User getUser(String nama, String nomorTelepon){
         // TODO: Implementasi method untuk mendapat user dari userList
+        User userLoggedIn = null;
         for (User user : userList) {
             if (user.getNama().equals(nama) && user.getNomorTelepon().equals(nomorTelepon)) {
-                return user;
+                userLoggedIn = user;
+                break;
             }
         }
-        return null;
+        return userLoggedIn;
     }
 
     public static void handleBuatPesanan(){
@@ -110,50 +105,44 @@ public class MainMenu {
 
     public static void handleTambahRestoran(){
         // TODO: Implementasi method untuk handle ketika admin ingin tambah restoran
-        tambahRestoran();
-    }
-    public static void tambahRestoran() {
-        System.out.print("Nama: ");
-        String namaRestoran = input.nextLine();
-
-        System.out.print("Jumlah Makanan: ");
-        int jumlahMakanan = input.nextInt();
-        input.nextLine();
-
-        Restaurant newRestaurant = new Restaurant(namaRestoran); // Membuat instansi baru dari class restaurant 
-
-        for (int i = 0; i < jumlahMakanan; i++) {
-            System.out.print("Nama Makanan dan harga: ");
-            String inputMakanan = input.nextLine();
         
-        StringTokenizer tokenizer = new StringTokenizer(inputMakanan);
-        String namaMakanan = "";
-        double harga = 0;
-        
-        while (tokenizer.hasMoreTokens()) {
-            String token = tokenizer.nextToken();
-            try {
-                harga = Double.parseDouble(token);
-                break; // Jika token adalah angka, maka berhenti dari loop
-            } catch (NumberFormatException e) {
-                namaMakanan += token + " ";
+        while (true) {
+            System.out.print("Masukkan nama restoran:");
+            String namaRestoran = input.nextLine();
+            Restaurant newRestaurant = new Restaurant(namaRestoran);
+            if (namaRestoran.length() < 4) {
+                System.out.print("Nama restoran tidak valid!");
+                continue;
             }
-        }
-        
-        // Menghapus spasi ekstra di akhir nama makanan
-        namaMakanan = namaMakanan.trim();
-
-        // Membuat instansi Menu baru
-        Menu newMenu = new Menu(namaMakanan, harga);
-        // Menambahkan menu ke restoran
-        newRestaurant.tambahMenu(newMenu);
-    }
-
-        // Menambahkan restoran baru ke daftar restoran
-        restoList.add(newRestaurant);
-        System.out.println("Restoran " + namaRestoran + "! berhasil terdaftar.");
-    }
     
+            System.out.print("Masukkan jumlah makanan yang ingin ditambahkan:");
+            int jumlahMakanan = input.nextInt();
+            input.nextLine(); // Membuang newline setelah nextInt()
+    
+            System.out.print("Masukkan menu restoran (nama makanan harga):");
+            int makananCount = 0;
+            while (makananCount < jumlahMakanan) {
+                String menuInput = input.nextLine();
+                int lastSpaceIndex = menuInput.lastIndexOf(' ');
+                if (lastSpaceIndex == -1 || lastSpaceIndex == 0 || lastSpaceIndex == menuInput.length() - 1) {
+                    System.out.print("Format input tidak valid. Masukkan kembali (nama makanan harga):");
+                } else {
+                    String namaMakanan = menuInput.substring(0, lastSpaceIndex);
+                    String hargaStr = menuInput.substring(lastSpaceIndex + 1);
+                    try {
+                        double harga = Double.parseDouble(hargaStr);
+                        Menu newMenu = new Menu(namaMakanan, harga);
+                        newRestaurant.tambahMenu(newMenu);
+                        makananCount++;
+                    } catch (NumberFormatException e) {
+                        System.out.print("Format input harga tidak valid. Masukkan kembali (nama makanan harga):");
+                    }
+                }
+            }
+            restoList.add(newRestaurant);
+            System.out.println("Restaurant " + namaRestoran + " berhasil terdaftar");
+        }
+    }
 
     public static void handleHapusRestoran(){
         // TODO: Implementasi method untuk handle ketika admin ingin tambah restoran
