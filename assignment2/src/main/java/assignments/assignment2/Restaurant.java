@@ -5,6 +5,7 @@ public class Restaurant {
      // TODO: tambahkan attributes yang diperlukan untuk class ini
     private String nama;
     private ArrayList<Menu> menu;
+    
     public Restaurant(String nama){
         // TODO: buat constructor untuk class ini
         this.nama = nama;
