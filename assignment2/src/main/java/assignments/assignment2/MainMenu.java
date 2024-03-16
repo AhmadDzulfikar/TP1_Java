@@ -1,5 +1,7 @@
 package assignments.assignment2;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -184,6 +186,23 @@ public class MainMenu {
         return calculatedChecksum.equals(checksumFromInput);
     }
 
+    public static int calculateDeliveryCost(String location) {
+        switch (location) {
+            case "P":
+                return 10000;
+            case "U":
+                return 20000;
+            case "T":
+                return 35000;
+            case "S":
+                return 40000;
+            case "B":
+                return 60000;
+            default:
+                return 0;
+        }
+    }
+
     public static void handleBuatPesanan(){
         String namaResto;
         String tanggalPemesanan;
@@ -254,7 +273,47 @@ public class MainMenu {
     }
 
     public static void handleCetakBill(){
-        
+    System.out.println("-----------------Cetak Bill-----------------");
+    String orderId;
+    Order targetOrder;
+
+    do {
+        System.out.print("Masukkan Order ID: ");
+        orderId = input.nextLine();
+
+        targetOrder = null;
+        for (Order order : userLoggedIn.getDaftarPesanan()) {
+            if (order.getOrderId().equals(orderId)) {
+                targetOrder = order;
+                break;
+            }
+        }
+
+        if (targetOrder == null) {
+            System.out.println("Order ID tidak ditemukan. Silakan coba lagi.");
+        }
+    } while (targetOrder == null);
+
+    System.out.println("\nBill:");
+    System.out.println("Order ID: " + targetOrder.getOrderId());
+    System.out.println("Tanggal Pemesanan: " + targetOrder.getTanggalPemesanan());
+    System.out.println("Restaurant: " + targetOrder.getResto().getNama());
+    System.out.println("Lokasi Pengiriman: " + userLoggedIn.getLokasi());
+    System.out.println("Status Pengiriman: " + (targetOrder.isPengirimanSelesai() ? "Finished" : "Not Finished"));
+
+    System.out.println("Pesanan:");
+    for (Menu menu : targetOrder.getPesanan()) {
+        System.out.println("- " + menu.getNamaMakanan() + " " + (int) menu.getHarga()); // Mengonversi harga menjadi integer
+    }
+
+    int biayaOngkosKirim = calculateDeliveryCost(userLoggedIn.getLokasi());
+    System.out.println("Biaya Ongkos Kirim: Rp " + biayaOngkosKirim);
+
+    int totalBiaya = biayaOngkosKirim;
+    for (Menu menu : targetOrder.getPesanan()) {
+        totalBiaya += menu.getHarga();
+    }
+    System.out.println("Total Biaya: " + totalBiaya);
     }
 
     public static void handleLihatMenu(){
@@ -347,7 +406,7 @@ public class MainMenu {
     public static void initUser(){
        userList = new ArrayList<User>();
        // No telp: Thomas N yg asli: 9928765403
-       userList.add(new User("Thomas N", "12345", "thomas.n@gmail.com", "P", "Customer"));
+       userList.add(new User("Thomas N", "9928765403", "thomas.n@gmail.com", "P", "Customer"));
        userList.add(new User("Sekar Andita", "089877658190", "dita.sekar@gmail.com", "B", "Customer"));
        userList.add(new User("Sofita Yasusa", "084789607222", "sofita.susa@gmail.com", "T", "Customer"));
        userList.add(new User("Dekdepe G", "080811236789", "ddp2.gampang@gmail.com", "S", "Customer"));

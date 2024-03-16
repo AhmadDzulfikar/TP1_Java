@@ -33,6 +33,10 @@ public class User {
         return nomortelepon;
     }
 
+    public String getLokasi() {
+        return lokasi;
+    }
+
     // Setter
     public void setRole(String role) {
         this.role = role;
@@ -46,8 +50,17 @@ public class User {
         this.nomortelepon = nomorTelepon;
     }
 
+    public void setLokasi(String lokasi) {
+        this.lokasi = lokasi;
+    }
+
     public void tambahPesanan(Order order) {
         orderHistory.add(order);
+    }
+
+    // Method to get the list of orders
+    public ArrayList<Order> getDaftarPesanan() {
+        return orderHistory;
     }
 
     public ArrayList<Order> getOrderHistory() {
