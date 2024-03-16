@@ -8,7 +8,7 @@ public class User {
     private String email;
     private String lokasi;
     private String role;
-    private static ArrayList<Order> orderHistory = new ArrayList<>();
+    private ArrayList<Order> orderHistory = new ArrayList<>();
 
      // TODO: tambahkan attributes yang diperlukan untuk class ini
     public User(String nama, String nomorTelepon, String email, String lokasi, String role){
@@ -18,6 +18,7 @@ public class User {
         this.email = email;
         this. lokasi = lokasi;
         this.role = role;
+        this.orderHistory = new ArrayList<>();
     }
     // Getter 
     public String getRole() {
@@ -44,5 +45,12 @@ public class User {
     public void setNomorTelepon(String nomorTelepon) {
         this.nomortelepon = nomorTelepon;
     }
-    // TODO: tambahkan methods yang diperlukan untuk class ini
+
+    public void tambahPesanan(Order order) {
+        orderHistory.add(order);
+    }
+
+    public ArrayList<Order> getOrderHistory() {
+        return orderHistory;
+    }
 }

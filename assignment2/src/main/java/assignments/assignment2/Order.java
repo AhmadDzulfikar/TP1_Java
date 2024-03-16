@@ -1,10 +1,65 @@
 package assignments.assignment2;
 
 public class Order {
-     // TODO: tambahkan attributes yang diperlukan untuk class ini
+     // attributes
+    private String orderId;
+    private String tanggal; 
+    private int ongkir;
+    private Restaurant resto;
+    private Menu[] items;
+
     public Order(String orderId, String tanggal, int ongkir, Restaurant resto, Menu[] items){
-        // TODO: buat constructor untuk class ini
+        // constructor 
+        this.orderId = orderId;
+        this.tanggal = tanggal;
+        this.ongkir = ongkir; 
+        this.resto = resto;
+        this.items = items;
+    }
+
+    // Getter & Setter
+    //--------
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
+
+    //--------
+    public String getTanggal() {
+        return tanggal;
     }
     
-    // TODO: tambahkan methods yang diperlukan untuk class ini
+    public void setTanggal(String tanggal) {
+        this.tanggal = tanggal;
+    }
+
+    //--------
+    public int getOngkir() {
+        return ongkir;
+    }
+
+    public void setOngkir(int ongkir) {
+        this.ongkir = ongkir;
+    }
+
+    //--------
+    public Restaurant getResto() {
+        return resto;
+    }
+
+    public void setResto(Restaurant resto) {
+        this.resto = resto;
+    }
+
+    //--------
+    public Menu[] getItems() {
+        return items;
+    }
+
+    public int getJumlahpesanan() {
+        return items.length;
+    }
 }

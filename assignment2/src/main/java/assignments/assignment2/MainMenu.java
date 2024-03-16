@@ -190,14 +190,17 @@ public class MainMenu {
         String nomorTelponUser = userLoggedIn.getNomorTelepon();
         System.out.println("----------------Buat Pesanan-----------------");
         while (true) {
+            // Input nama restoran!
             System.out.print("Nama Restoran: ");
             namaResto = input.nextLine();
 
             // Untuk mengecek nama restoran sudah terdaftar atau belum
             boolean RestoranDidapati = false;
+            Restaurant targetResto = null;
             for (Restaurant resto : restoList) {
                 if (resto.getNama().equalsIgnoreCase(namaResto)) {
                     RestoranDidapati = true;
+                    targetResto = resto;
                     break;
                 }
             }
@@ -207,6 +210,7 @@ public class MainMenu {
                 continue;
             }
 
+            // Input tanggal pemesanan!
             System.out.print("Tanggal Pemesanan (DD/MM/YYYY): ");
             tanggalPemesanan = input.nextLine();
             if (!DATE_PATTERN.matcher(tanggalPemesanan).matches()) {
@@ -214,13 +218,43 @@ public class MainMenu {
                 continue;
             }
 
+            // Meminta jumlah pesanan
+            System.out.print("Jumlah Pemesanan: ");
+            int jumlahPesanan = input.nextInt();
+            input.nextLine(); // Membuang newline setelah nextInt()
+
+            Menu[] pesanan = new Menu[jumlahPesanan];
+            // Meminta nama makanan untuk setiap pesanan
+            System.out.println("Order:");
+            for (int i = 0; i < jumlahPesanan; i++) {
+                boolean pesananValid = false;
+                while (!pesananValid) {
+                    System.out.print("Pesanan " + (i+1) + ": ");
+                    String namaPesanan = input.nextLine();
+                    // Memeriksa apakah nama makanan ada di menu restoran
+                    for (Menu menu : targetResto.getMenu()) {
+                        if (menu.getNamaMakanan().equalsIgnoreCase(namaPesanan)) {
+                            pesanan[i] = menu;
+                            pesananValid = true;
+                            break;
+                        }
+                    }
+                    if (!pesananValid) {
+                        System.out.println("Mohon memesan menu yang tersedia di Restoran.");
+                    }
+                }
+            }
+
             String orderId = generateOrderID(namaResto, tanggalPemesanan, nomorTelponUser);
+            Order order = new Order(orderId, tanggalPemesanan, 0, targetResto, pesanan);
+            userLoggedIn.tambahPesanan(order); // Menambahkan pesanan ke riwayat pesanan pengguna
             System.out.println("Pesanan dengan ID " + orderId.toUpperCase() + " diterima!");
+            break;
         }
     }
 
     public static void handleCetakBill(){
-        // TODO: Implementasi method untuk handle ketika customer ingin cetak bill
+        
     }
 
     public static void handleLihatMenu(){
@@ -312,7 +346,8 @@ public class MainMenu {
 
     public static void initUser(){
        userList = new ArrayList<User>();
-       userList.add(new User("Thomas N", "9928765403", "thomas.n@gmail.com", "P", "Customer"));
+       // No telp: Thomas N yg asli: 9928765403
+       userList.add(new User("Thomas N", "12345", "thomas.n@gmail.com", "P", "Customer"));
        userList.add(new User("Sekar Andita", "089877658190", "dita.sekar@gmail.com", "B", "Customer"));
        userList.add(new User("Sofita Yasusa", "084789607222", "sofita.susa@gmail.com", "T", "Customer"));
        userList.add(new User("Dekdepe G", "080811236789", "ddp2.gampang@gmail.com", "S", "Customer"));
