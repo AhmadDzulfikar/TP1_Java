@@ -27,6 +27,13 @@ public class MainMenu {
         printHeader();
         while(programRunning){
             startMenu();
+
+            while (!input.hasNextInt()) {
+                System.out.println("Maaf, yang anda input bukanlah bilangan bulat");
+                startMenu();
+                input.next();
+            }
+
             int command = input.nextInt();
             input.nextLine();
 
@@ -273,25 +280,93 @@ public class MainMenu {
     }
 
     public static void handleCetakBill(){
-    // System.out.println("----------------Cetak Bill(----------------");
-    // String orderId;
-    // Order targetOrder;
+    System.out.println("----------------Cetak Bill----------------");
+    String orderId;
+    Order targetOrder;
 
-    // do {
-    //     System.out.println("Masukkan Order ID: ");
-    //     orderId = input.nextLine();
+    do {
+        System.out.println("Masukkan Order ID: ");
+        orderId = input.nextLine();
 
-    //     targetOrder = null;
-    //     for (Order order : userLoggedIn.getDaftarPesanan()) {
-    //         if (order.getOrderId().equals(orderId)) {
-    //             targetOrder = order;
-    //             break;
-    //         }
-    //     }
-    // }
+        targetOrder = null;
+        for (Order order : userLoggedIn.getDaftarPesanan()) {
+            if (order.getOrderId().equals(orderId)) {
+                targetOrder = order;
+                break;
+            }
+        }
+
+        if (targetOrder == null) {
+            System.out.println("Order ID tidak ditemukan. Silahkan coba lagi");
+        }
+        } while (targetOrder == null);
+
+        System.out.println("\nBill:");
+        System.out.println("Order ID: " + targetOrder.getOrderId()); // Class Order
+        System.out.println("Tanggal Pemesanan: " + targetOrder.getTanggalPemesanan());   // Class Order
+        System.out.println("Restaurant: " + targetOrder.getResto().getNama());   
+        System.out.println("Lokasi Pengiriman: " + userLoggedIn.getLokasi());    // Class User
+        System.out.println("Status Pengiriman: " + (targetOrder.isPengirimanSelesai() ? "Finished" : "Not Finished"));
+        
+        System.out.println("Pesanan:");
+        for (Menu menu : targetOrder.getPesanan()) {
+            System.out.println("-" + menu.getNamaMakanan() + " " + (int)menu.getHarga()); 
+        }
+
+        int biayaOngkos = calculateDeliveryCost(userLoggedIn.getLokasi());
+        System.out.println("Biaya Ongkos Kirim: Rp " + biayaOngkos);
+
+        int totalOngkos = biayaOngkos;
+        for (Menu menu : targetOrder.getPesanan()) {
+            totalOngkos += menu.getHarga();
+        }
+        System.out.println("Total Biaya: Rp " + totalOngkos);
+    
     }
     public static void handleLihatMenu(){
-        // TODO: Implementasi method untuk handle ketika customer ingin melihat menu
+        System.out.println("-----------------Lihat Menu-----------------");
+    // Meminta input nama restoran
+    String namaResto;
+    boolean restoFound = false;
+    do {
+        System.out.print("Nama Restoran: ");
+        namaResto = input.nextLine();
+
+        // Mencari restoran berdasarkan nama yang dimasukkan
+        for (Restaurant resto : restoList) {
+            if (resto.getNama().equalsIgnoreCase(namaResto)) {
+                restoFound = true;
+                // Pengurutan menu dalam restoran
+                int n = resto.getMenu().size();
+                // Algoritma bubble sort
+                for (int i = 0; i < n - 1; i++) {
+                    for (int j = 0; j < n - i - 1; j++) {
+                        // Membandingkan dua menu berdasarkan harga, jika harga sama, dibandingkan berdasarkan nama alfabetis
+                        if (resto.getMenu().get(j).getHarga() > resto.getMenu().get(j + 1).getHarga()
+                                || (resto.getMenu().get(j).getHarga() == resto.getMenu().get(j + 1).getHarga()
+                                && resto.getMenu().get(j).getNamaMakanan().compareToIgnoreCase(resto.getMenu().get(j + 1).getNamaMakanan()) > 0)) {
+                            // Menu pertukaran jika kondisi terpenuhi
+                            Menu temp = resto.getMenu().get(j);
+                            resto.getMenu().set(j, resto.getMenu().get(j + 1));
+                            resto.getMenu().set(j + 1, temp);
+                        }
+                    }
+                }
+                // Mencetak menu yang sudah diurutkan
+                System.out.println("Menu:");
+                int menuNumber = 1;
+                for (Menu menu : resto.getMenu()) {
+                    System.out.println(menuNumber + ". " + menu.getNamaMakanan() + " " + (int) menu.getHarga());
+                    menuNumber++;
+                }
+                break;
+            }
+        }
+
+        if (!restoFound) {
+            System.out.println("Restoran tidak ditemukan. Silakan coba lagi.");
+        }
+    } while (!restoFound);
     }
 
     public static void handleUpdateStatusPesanan(){
