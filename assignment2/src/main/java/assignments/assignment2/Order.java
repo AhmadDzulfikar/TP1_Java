@@ -70,10 +70,7 @@ public class Order {
 
     // Getter for pengirimanSelesai
     public boolean isPengirimanSelesai() {
-        // Implement this method based on your business logic
-        // For example, you might have a boolean flag to indicate if the delivery is completed
-        // You can return that flag here
-        return false; // Placeholder, replace with your actual implementation
+        return false; 
     }
 
     // Getter for pesanan

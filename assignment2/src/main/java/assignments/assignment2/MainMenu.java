@@ -325,49 +325,48 @@ public class MainMenu {
     }
     public static void handleLihatMenu(){
         System.out.println("-----------------Lihat Menu-----------------");
-    // Meminta input nama restoran
-    String namaResto;
-    boolean restoFound = false;
-    do {
-        System.out.print("Nama Restoran: ");
-        namaResto = input.nextLine();
+        String namaResto;
+        boolean restoRegistered = false;
+        do {
+            System.out.print("Nama Restoran: ");
+            namaResto = input.nextLine();
 
-        // Mencari restoran berdasarkan nama yang dimasukkan
-        for (Restaurant resto : restoList) {
-            if (resto.getNama().equalsIgnoreCase(namaResto)) {
-                restoFound = true;
-                // Pengurutan menu dalam restoran
-                int n = resto.getMenu().size();
-                // Algoritma bubble sort
-                for (int i = 0; i < n - 1; i++) {
-                    for (int j = 0; j < n - i - 1; j++) {
-                        // Membandingkan dua menu berdasarkan harga, jika harga sama, dibandingkan berdasarkan nama alfabetis
-                        if (resto.getMenu().get(j).getHarga() > resto.getMenu().get(j + 1).getHarga()
-                                || (resto.getMenu().get(j).getHarga() == resto.getMenu().get(j + 1).getHarga()
-                                && resto.getMenu().get(j).getNamaMakanan().compareToIgnoreCase(resto.getMenu().get(j + 1).getNamaMakanan()) > 0)) {
-                            // Menu pertukaran jika kondisi terpenuhi
-                            Menu temp = resto.getMenu().get(j);
-                            resto.getMenu().set(j, resto.getMenu().get(j + 1));
-                            resto.getMenu().set(j + 1, temp);
+            // Mencari nama restoran sesuai dengan nama resto yang di input
+            for (Restaurant resto : restoList) {
+                if (resto.getNama().equalsIgnoreCase(namaResto)) {
+                    restoRegistered = true;
+                    // Pengurutan menu dalam restoran
+                    int n = resto.getMenu().size(); // Mendapatkan jumlah menu dalam restoran (size)
+                    // Mulai Bubble Sort
+                    for (int i = 0; i < n - 1; i++) { // for pertama = mengatur berapa kali mengulangi proses pengurutan (mengulangi proses sebanyak i - 1)
+                        for (int k = 0; k < n - i - 1; k++) { // for kedua = membandingkan pasangan menu berturut turut dan menukarnya
+                            // Membandingkan menu berdasarkan harga, jika harganya sama maka akan dibandingkan dengan huruf
+                            if (resto.getMenu().get(k).getHarga() > resto.getMenu().get(k + 1).getHarga() || (resto.getMenu().get(k).getHarga() == resto.getMenu().get(k + 1).getHarga()
+                                    && resto.getMenu().get(k).getNamaMakanan().compareToIgnoreCase(resto.getMenu().get(k + 1).getNamaMakanan()) > 0)) {
+                                // Menu pertukaran kika kondisi terpenuhi
+                                Menu temp = resto.getMenu().get(k); // Menyimpan sementara
+                                resto.getMenu().set(k, resto.getMenu().get(k + 1)); // Mindahin menu di posisi K+1 ke K
+                                resto.getMenu().set(k + 1, temp); // Nuker posisi K+1 dengan K (sebaliknya juga)
+                            }
                         }
                     }
+                    // Mencetak hasil dari menu yang sudah diurutkan 
+                    System.out.println("Menu:");
+                    int menuNumber = 1;
+                    for (Menu menu : resto.getMenu()) {
+                        System.out.println(menuNumber + ". " + menu.getNamaMakanan() + " " + (int) menu.getHarga());
+                        menuNumber++;
+                    }
+                    break;
                 }
-                // Mencetak menu yang sudah diurutkan
-                System.out.println("Menu:");
-                int menuNumber = 1;
-                for (Menu menu : resto.getMenu()) {
-                    System.out.println(menuNumber + ". " + menu.getNamaMakanan() + " " + (int) menu.getHarga());
-                    menuNumber++;
-                }
-                break;
             }
-        }
 
-        if (!restoFound) {
-            System.out.println("Restoran tidak ditemukan. Silakan coba lagi.");
-        }
-    } while (!restoFound);
-    }
+            if (!restoRegistered) {
+                System.out.println("Restoran tidak ditemukan. Silakan coba lagi.");
+            }
+        } while (!restoRegistered);
+}
+    
 
     public static void handleUpdateStatusPesanan(){
         // TODO: Implementasi method untuk handle ketika customer ingin update status pesanan
