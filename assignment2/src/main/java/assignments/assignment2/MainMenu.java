@@ -273,49 +273,23 @@ public class MainMenu {
     }
 
     public static void handleCetakBill(){
-    System.out.println("-----------------Cetak Bill-----------------");
-    String orderId;
-    Order targetOrder;
+    // System.out.println("----------------Cetak Bill(----------------");
+    // String orderId;
+    // Order targetOrder;
 
-    do {
-        System.out.print("Masukkan Order ID: ");
-        orderId = input.nextLine();
+    // do {
+    //     System.out.println("Masukkan Order ID: ");
+    //     orderId = input.nextLine();
 
-        targetOrder = null;
-        for (Order order : userLoggedIn.getDaftarPesanan()) {
-            if (order.getOrderId().equals(orderId)) {
-                targetOrder = order;
-                break;
-            }
-        }
-
-        if (targetOrder == null) {
-            System.out.println("Order ID tidak ditemukan. Silakan coba lagi.");
-        }
-    } while (targetOrder == null);
-
-    System.out.println("\nBill:");
-    System.out.println("Order ID: " + targetOrder.getOrderId());
-    System.out.println("Tanggal Pemesanan: " + targetOrder.getTanggalPemesanan());
-    System.out.println("Restaurant: " + targetOrder.getResto().getNama());
-    System.out.println("Lokasi Pengiriman: " + userLoggedIn.getLokasi());
-    System.out.println("Status Pengiriman: " + (targetOrder.isPengirimanSelesai() ? "Finished" : "Not Finished"));
-
-    System.out.println("Pesanan:");
-    for (Menu menu : targetOrder.getPesanan()) {
-        System.out.println("- " + menu.getNamaMakanan() + " " + (int) menu.getHarga()); // Mengonversi harga menjadi integer
+    //     targetOrder = null;
+    //     for (Order order : userLoggedIn.getDaftarPesanan()) {
+    //         if (order.getOrderId().equals(orderId)) {
+    //             targetOrder = order;
+    //             break;
+    //         }
+    //     }
+    // }
     }
-
-    int biayaOngkosKirim = calculateDeliveryCost(userLoggedIn.getLokasi());
-    System.out.println("Biaya Ongkos Kirim: Rp " + biayaOngkosKirim);
-
-    int totalBiaya = biayaOngkosKirim;
-    for (Menu menu : targetOrder.getPesanan()) {
-        totalBiaya += menu.getHarga();
-    }
-    System.out.println("Total Biaya: " + totalBiaya);
-    }
-
     public static void handleLihatMenu(){
         // TODO: Implementasi method untuk handle ketika customer ingin melihat menu
     }
