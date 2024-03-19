@@ -26,5 +26,8 @@ public class Restaurant {
     public ArrayList<Menu> getMenu() {
         return menu;
     }
-    
+
+    public void setMenu(ArrayList<Menu> menu) {
+        this.menu = menu;
+    }
 }

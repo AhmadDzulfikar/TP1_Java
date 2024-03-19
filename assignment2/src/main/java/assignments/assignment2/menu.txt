@@ -1,7 +1,7 @@
 package assignments.assignment2;
 
-// import java.text.DecimalFormat;
-// import java.text.DecimalFormatSymbols;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -20,7 +20,6 @@ public class MainMenu {
     'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
     'U', 'V', 'W', 'X', 'Y', 'Z'};
 
-    // Jalannya program utama untuk memilih menu
     public static void main(String[] args) {
         restoList = new ArrayList<>();
         initUser();
@@ -29,7 +28,6 @@ public class MainMenu {
         while(programRunning){
             startMenu();
 
-            // Validasi input apakah yang diinput adalah bilangan bulat atau bukan
             while (!input.hasNextInt()) {
                 System.out.println("Maaf, yang anda input bukanlah bilangan bulat");
                 startMenu();
@@ -39,7 +37,6 @@ public class MainMenu {
             int command = input.nextInt();
             input.nextLine();
 
-            // Sistem login 
             if(command == 1){
                 System.out.println("\nSilakan Login:");
                 System.out.print("Nama: ");
@@ -47,7 +44,10 @@ public class MainMenu {
                 System.out.print("Nomor Telepon: ");
                 String noTelp = input.nextLine();
 
+                // TODO: Validasi input login
+
                 userLoggedIn = getUser(nama, noTelp);
+                // User userLoggedIn = getUser(nama, noTelp);
 
                 if (userLoggedIn != null) {
                     System.out.println("Selamat datang " + userLoggedIn.getNama());
@@ -56,7 +56,6 @@ public class MainMenu {
                     continue;
                 }
 
-                // Kalau yg diinput adalah role customer maka akan memunculkan menuCustomer()
                 boolean isLoggedIn = true;
                 if(userLoggedIn.getRole().equals("Customer")){
                     while (isLoggedIn){
@@ -64,7 +63,6 @@ public class MainMenu {
                         int commandCust = input.nextInt();
                         input.nextLine();
 
-                        // mengatur jalannya pilih menu sesuai rolenya
                         switch(commandCust){
                             case 1 -> handleBuatPesanan();
                             case 2 -> handleCetakBill();
@@ -74,8 +72,7 @@ public class MainMenu {
                             default -> System.out.println("Perintah tidak diketahui, silakan coba kembali");
                         }
                     }
-                // Kalau yg diinput adalah role admin maka akan memunculkan menuAdmin()
-                }else{  
+                }else{
                     while (isLoggedIn){
                         menuAdmin();
                         int commandAdmin = input.nextInt();
@@ -152,7 +149,7 @@ public class MainMenu {
         return orderId;
     }
 
-    // Metode untuk menghasilkan ID pesanan dengan checksum
+        // Metode untuk menghasilkan ID pesanan dengan checksum
     // Method untuk menghitung checksum berdasarkan aturan yang diberikan
     private static String calculateChecksum(String orderId) {
         int sumEven = 0;
@@ -196,7 +193,6 @@ public class MainMenu {
         return calculatedChecksum.equals(checksumFromInput);
     }
 
-    // Mendefine jika lokasi sesuatu maka harganya sekian
     public static int calculateDeliveryCost(String location) {
         switch (location) {
             case "P":
@@ -227,9 +223,9 @@ public class MainMenu {
             // Untuk mengecek nama restoran sudah terdaftar atau belum
             boolean RestoranDidapati = false;
             Restaurant targetResto = null;
-            for (Restaurant resto : restoList) {    // Mengiterasi setiap elemen daftar restoList
-                if (resto.getNama().equalsIgnoreCase(namaResto)) {  // Memeriksa apakah nama restoran yang ada di objek resto itu sama dengan yang diinput
-                    RestoranDidapati = true;    // Restoran ditemukan 
+            for (Restaurant resto : restoList) {
+                if (resto.getNama().equalsIgnoreCase(namaResto)) {
+                    RestoranDidapati = true;
                     targetResto = resto;
                     break;
                 }
@@ -243,7 +239,7 @@ public class MainMenu {
             // Input tanggal pemesanan!
             System.out.print("Tanggal Pemesanan (DD/MM/YYYY): ");
             tanggalPemesanan = input.nextLine();
-            if (!DATE_PATTERN.matcher(tanggalPemesanan).matches()) { // Mencocokan input tanggal pemesanan dengan pola, mereturn true jika benar dan sebaliknya, jika false turun kebawah
+            if (!DATE_PATTERN.matcher(tanggalPemesanan).matches()) {
                 System.out.println("Masukkan tanggal sesuai format (DD/MM/YYYY) !");
                 continue;
             }
@@ -256,11 +252,10 @@ public class MainMenu {
             Menu[] pesanan = new Menu[jumlahPesanan];
             // Meminta nama makanan untuk setiap pesanan
             System.out.println("Order:");
-
-            // Meminta input user untuk memasukkan pesanan yang mau ditambahkan ke pesanan mereka
             for (int i = 0; i < jumlahPesanan; i++) {
                 boolean pesananValid = false;
                 while (!pesananValid) {
+                    System.out.print("Pesanan " + (i+1) + ": ");
                     String namaPesanan = input.nextLine();
                     // Memeriksa apakah nama makanan ada di menu restoran
                     for (Menu menu : targetResto.getMenu()) {
@@ -276,8 +271,8 @@ public class MainMenu {
                 }
             }
 
-            String orderId = generateOrderID(namaResto, tanggalPemesanan, nomorTelponUser); // Menggunakan generateOrderID untuk membuat orderId
-            Order order = new Order(orderId, tanggalPemesanan, 0, targetResto, pesanan);    // Membuat objek Order baru menggunakan konstruktor Order
+            String orderId = generateOrderID(namaResto, tanggalPemesanan, nomorTelponUser);
+            Order order = new Order(orderId, tanggalPemesanan, 0, targetResto, pesanan);
             userLoggedIn.tambahPesanan(order); // Menambahkan pesanan ke riwayat pesanan pengguna
             System.out.println("Pesanan dengan ID " + orderId.toUpperCase() + " diterima!");
             break;
@@ -293,31 +288,27 @@ public class MainMenu {
         System.out.print("Masukkan Order ID: ");
         orderId = input.nextLine();
 
-        targetOrder = null; // Kalau gaada orderId yang cocok maka akan tetap null
-        // Perulangan setiap pesanan user yang terdaftar
-        for (Order order : userLoggedIn.getOrderHistory()) {
+        targetOrder = null;
+        for (Order order : userLoggedIn.getDaftarPesanan()) {
             if (order.getOrderId().equals(orderId)) {
                 targetOrder = order;
                 break;
             }
         }
 
-        // Jika tidak hasil dari targetOrdernya masih null maka akan memunculkan output tidak ditemukan
         if (targetOrder == null) {
             System.out.println("Order ID tidak ditemukan. Silahkan coba lagi");
         }
         } while (targetOrder == null);
 
-        // Mencetak output
         System.out.println("\nBill:");
         System.out.println("Order ID: " + targetOrder.getOrderId()); // Class Order
         System.out.println("Tanggal Pemesanan: " + targetOrder.getTanggalPemesanan());   // Class Order
-        System.out.println("Restaurant: " + targetOrder.getResto().getNama());  // class Order
+        System.out.println("Restaurant: " + targetOrder.getResto().getNama());   
         System.out.println("Lokasi Pengiriman: " + userLoggedIn.getLokasi());    // Class User
-        System.out.println("Status Pengiriman: " + (targetOrder.isPengirimanSelesai() ? "Finished" : "Not Finished")); // Jika kondisi bernilai true maka return Finished, dan sebaliknya
+        System.out.println("Status Pengiriman: " + (targetOrder.isPengirimanSelesai() ? "Finished" : "Not Finished"));
         
         System.out.println("Pesanan:");
-        // Mengambil setiap elemen dalam daftar pesanan
         for (Menu menu : targetOrder.getPesanan()) {
             System.out.println("-" + menu.getNamaMakanan() + " " + (int)menu.getHarga()); 
         }
@@ -325,12 +316,11 @@ public class MainMenu {
         int biayaOngkos = calculateDeliveryCost(userLoggedIn.getLokasi());
         System.out.println("Biaya Ongkos Kirim: Rp " + biayaOngkos);
 
-        int totalBiaya = biayaOngkos;
-        // Untuk mengakses setiap elemen dalam daftar pesanan dan menghitung semua biayanya
+        int totalOngkos = biayaOngkos;
         for (Menu menu : targetOrder.getPesanan()) {
-            totalBiaya += menu.getHarga();
+            totalOngkos += menu.getHarga();
         }
-        System.out.println("Total Biaya: Rp " + totalBiaya);
+        System.out.println("Total Biaya: Rp " + totalOngkos);
     
     }
     public static void handleLihatMenu(){
@@ -377,7 +367,7 @@ public class MainMenu {
         } while (!restoRegistered);
 }
     
-    // Mengubah status pengiriman Selesai atau belum selesai
+
     public static void handleUpdateStatusPesanan(){
         System.out.println("----------------Update Status Pesanan----------------");
         boolean orderFound = false;
@@ -387,12 +377,12 @@ public class MainMenu {
             System.out.print("Order ID: ");
             String orderId = input.nextLine();
 
-            // Memeriksa apakah Order ID ditemukan atau tidak
+            // Memeriksa apakah Order ID ditemukan
             Order targetOrder = null;
-            for (User user : userList) {    // Mengiterasi setiap user di userList
-                for (Order order : user.getOrderHistory()) { // Mengiterasi setiap pesanan dalam daftar pesanan user
-                    if (order.getOrderId().equalsIgnoreCase(orderId)) { // Membandingkan kedua orderId (yang ada di order dengan input baru)
-                        orderFound = true;  // Jika ketemu 
+            for (User user : userList) {
+                for (Order order : user.getDaftarPesanan()) {
+                    if (order.getOrderId().equalsIgnoreCase(orderId)) {
+                        orderFound = true;
                         targetOrder = order;
                         break;
                     }
@@ -407,11 +397,12 @@ public class MainMenu {
                 System.out.println("Order ID tidak ditemukan. Silakan coba lagi.");
                 continue; // Kembali ke awal loop untuk meminta input Order ID baru
             }
-            
+
+            // Meminta input Status
             System.out.print("Status: ");
             String status = input.nextLine();
 
-            // Untuk mengecek status pesanan sebelumnya selesai atau engga, dan apakah yang diinput status tulisan "Selesai" 
+            // Memeriksa apakah status pesanan sudah selesai sebelumnya
             if (targetOrder.isPengirimanSelesai() && status.equalsIgnoreCase("Selesai")) {
                 System.out.println("Status pesanan Order ID " + orderId + " tidak berhasil diupdate.");
                 return;
@@ -428,98 +419,9 @@ public class MainMenu {
         }
     }
 
-    // Memeriksa apakah String terdiri dari karakter-karakter yg bisa direpresentasikan angka
-    public static boolean isDigit(String str) {
-        try {
-            Double.parseDouble(str);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
-    }
+        public static void handleTambahRestoran(){
 
-    // method untuk memeriksa apakah semua elemen di array dapat disimpan dengan valid
-    public static boolean simpanMenu(String[] menuArray) {
-        for (String menu : menuArray) {
-            String[] makananDanHarga = menu.split(" ");
-            if (!isDigit(makananDanHarga[makananDanHarga.length - 1])) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    // method untuk memisahkan string menjadi dua (nama makanan & harganya)
-    public static String[] splitMenu(String menu) {
-        String[] makananDanHarga = menu.split(" ");
-        String harga = makananDanHarga[makananDanHarga.length - 1];
-        String namaMenu = menu.substring(0, menu.length() - (harga.length() + 1));
-        return new String[] {namaMenu, harga};
-    }
-
-    // Method membuat restoran beserta menambah menunya
-    public static void handleTambahRestoran(){
-    System.out.println("------------Tambah Restoran------------");
-    while (true) {
-        System.out.print("Nama: "); 
-        String nama = input.nextLine();
-        if (nama.length() < 4) {
-            System.out.println("Nama restoran tidak valid\n");
-            continue;
-        }
-
-        boolean restoTerdaftar = isRestoranTerdaftar(nama); // untuk mengecek apakah restoran sudah terdaftar
-
-        if (restoTerdaftar) {
-            System.out.println("Restoran dengan nama " + nama + " sudah pernah terdaftar. Mohon masukkan nama yang berbeda!");
-            continue;
-        }
-
-        System.out.print("Jumlah makanan: ");
-        int jumlahMakanan = input.nextInt();
-        input.nextLine();
-        String[] menuArray = new String[jumlahMakanan];
-        for (int i = 0; i < jumlahMakanan; i++) {
-            System.out.print(" ");
-            String inputMenu = input.nextLine();
-            menuArray[i] = inputMenu;
-        }
-        if (simpanMenu(menuArray)) {
-            tambahRestoran(nama, menuArray); // Menggunakan method baru untuk menambahkan restoran ke dalam daftar
-            System.out.printf("Restaurant %s berhasil terdaftar.\n", nama);
-            break;
-        } else {
-            System.out.println("Harga menu harus bilangan bulat!\n");
-            continue;
-        }
-    }
-}
-
-    // Method untuk mengecek apakah restoran sudah terdaftar
-    public static boolean isRestoranTerdaftar(String namaRestoran) {
-        for (Restaurant resto : restoList) {
-            if (resto.getNama().equalsIgnoreCase(namaRestoran)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    // Method untuk menambahkan restoran ke dalam daftar
-    public static void tambahRestoran(String namaRestoran, String[] menuArray) {
-        ArrayList<Menu> listMenu = new ArrayList<Menu>();
-        for (String menu : menuArray) {
-            String[] makananDanHarga = splitMenu(menu);
-            String namaMakanan = makananDanHarga[0];
-            double harga = Double.parseDouble(makananDanHarga[1]);
-            listMenu.add(new Menu(namaMakanan, harga));
-        }
-        Restaurant newRestaurant = new Restaurant(namaRestoran);
-        newRestaurant.setMenu(listMenu);
-        restoList.add(newRestaurant);
-    }
     
-    // Hapus nama restoran yang sudah ada sesuai dengan nama inputan
     public static void handleHapusRestoran(){
         boolean restoDidapati = false;
         while (!restoDidapati) {
@@ -527,11 +429,11 @@ public class MainMenu {
             System.out.print("Nama Restoran: ");
             String namaRestoran = input.nextLine();
 
-            for (int i = 0; i < restoList.size(); i++) {    // resto list = mengetahui berapa banyak resto yang terdaftar
-                Restaurant resto = restoList.get(i);    // Mengambil objek di restoList sesuai indeks dan disimpan ke resto
-                if (resto.getNama().equalsIgnoreCase(namaRestoran)) {   // Ngebandingin yang ditemuin dengan yang diinput tanpa case sensitive
-                    restoList.remove(i);    // Kalo ketemu maka di hapus
-                    restoDidapati = true;   // ketika jadi true maka resto yang didapati terdaftar
+            for (int i = 0; i < restoList.size(); i++) {
+                Restaurant resto = restoList.get(i);
+                if (resto.getNama().equalsIgnoreCase(namaRestoran)) {
+                    restoList.remove(i);
+                    restoDidapati = true;
                     System.out.println("Restoran berhasil dihapus.");
                     break;
                 }
@@ -543,20 +445,19 @@ public class MainMenu {
         }
     }
 
-    // Menginisiasi biodata dari seseorang
     public static void initUser(){
-        userList = new ArrayList<User>();
-        userList.add(new User("Thomas N", "9928765403", "thomas.n@gmail.com", "P", "Customer"));
-        userList.add(new User("Sekar Andita", "089877658190", "dita.sekar@gmail.com", "B", "Customer"));
-        userList.add(new User("Dekdepe G", "080811236789", "ddp2.gampang@gmail.com", "S", "Customer"));
-        userList.add(new User("Sofita Yasusa", "084789607222", "sofita.susa@gmail.com", "T", "Customer"));
-        
-        userList.add(new User("Aurora Anum", "087788129043", "a.anum@gmail.com", "U", "Customer"));
-        userList.add(new User("Admin Baik", "9123912308", "admin.b@gmail.com", "-", "Admin"));
-        userList.add(new User("Admin", "123456789", "admin@gmail.com", "-", "Admin"));
+       userList = new ArrayList<User>();
+       // No telp: Thomas N yg asli: 9928765403
+       userList.add(new User("Thomas N", "9928765403", "thomas.n@gmail.com", "P", "Customer"));
+       userList.add(new User("Sekar Andita", "089877658190", "dita.sekar@gmail.com", "B", "Customer"));
+       userList.add(new User("Sofita Yasusa", "084789607222", "sofita.susa@gmail.com", "T", "Customer"));
+       userList.add(new User("Dekdepe G", "080811236789", "ddp2.gampang@gmail.com", "S", "Customer"));
+       userList.add(new User("Aurora Anum", "087788129043", "a.anum@gmail.com", "U", "Customer"));
+
+       userList.add(new User("Admin", "123456789", "admin@gmail.com", "-", "Admin"));
+       userList.add(new User("Admin Baik", "9123912308", "admin.b@gmail.com", "-", "Admin"));
     }
 
-    // Print Header
     public static void printHeader(){
         System.out.println("\n>>=======================================<<");
         System.out.println("|| _                 _             _ ||");
@@ -567,7 +468,6 @@ public class MainMenu {
         System.out.println(">>=======================================<<");
     }
 
-    // Print pilihan menu awal
     public static void startMenu(){
         System.out.println("\nSelamat datang di DepeFood!");
         System.out.println("--------------------------------------------");
@@ -578,7 +478,6 @@ public class MainMenu {
         System.out.print("Pilihan menu: ");
     }
 
-    // Print pilihan menu admin
     public static void menuAdmin(){
         System.out.println("\n--------------------------------------------");
         System.out.println("Pilih menu:");
@@ -589,7 +488,6 @@ public class MainMenu {
         System.out.print("Pilihan menu: ");
     }
 
-    // Print pilihan menu customer
     public static void menuCustomer(){
         System.out.println("--------------------------------------------");
         System.out.println("Pilih menu:");
