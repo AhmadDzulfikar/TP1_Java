@@ -3,6 +3,7 @@ package assignments.assignment2;
 import java.util.ArrayList;
 
 public class User {
+    // Attributes
     private String nama;
     private String nomortelepon;
     private String email;
@@ -10,9 +11,8 @@ public class User {
     private String role;
     private ArrayList<Order> orderHistory = new ArrayList<>();
 
-     // TODO: tambahkan attributes yang diperlukan untuk class ini
     public User(String nama, String nomorTelepon, String email, String lokasi, String role){
-        // TODO: buat constructor untuk class ini
+        // Konstruktor
         this.nama = nama;
         this.nomortelepon = nomorTelepon;
         this.email = email;
@@ -54,14 +54,13 @@ public class User {
         this.lokasi = lokasi;
     }
 
+
+    // Menambahkan pesanan kedalam orderHistory user
     public void tambahPesanan(Order order) {
         orderHistory.add(order);
     }
 
-    // Method to get the list of orders
-    public ArrayList<Order> getDaftarPesanan() {
-        return orderHistory;
-    }
+    // Mengembalikan daftar pesanan user dalam orderHistory
 
     public ArrayList<Order> getOrderHistory() {
         return orderHistory;

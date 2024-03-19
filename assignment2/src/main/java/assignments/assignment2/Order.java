@@ -7,6 +7,7 @@ public class Order {
     private int ongkir;
     private Restaurant resto;
     private Menu[] items;
+    private boolean pengirimanSelesai;
 
     public Order(String orderId, String tanggal, int ongkir, Restaurant resto, Menu[] items){
         // constructor 
@@ -15,6 +16,7 @@ public class Order {
         this.ongkir = ongkir; 
         this.resto = resto;
         this.items = items;
+        this.pengirimanSelesai = false;
     }
 
     // Getter & Setter
@@ -70,7 +72,13 @@ public class Order {
 
     // Getter for pengirimanSelesai
     public boolean isPengirimanSelesai() {
-        return false; 
+        return pengirimanSelesai; 
+    }
+
+    //-------- 
+    // Untuk mengatur apakah pengiriman Selesai atau Belum Selesai
+    public void setPengirimanSelesai(boolean pengirimanSelesai) {
+        this.pengirimanSelesai = pengirimanSelesai;
     }
 
     // Getter for pesanan

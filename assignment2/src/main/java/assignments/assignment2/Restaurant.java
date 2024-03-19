@@ -2,12 +2,12 @@ package assignments.assignment2;
 import java.util.ArrayList;
 
 public class Restaurant {
-     // TODO: tambahkan attributes yang diperlukan untuk class ini
+    // attributes
     private String nama;
     private ArrayList<Menu> menu;
     
     public Restaurant(String nama){
-        // TODO: buat constructor untuk class ini
+        // Konstruktor
         this.nama = nama;
         this.menu = new ArrayList<>();
     }
@@ -17,13 +17,14 @@ public class Restaurant {
         menu.add(itemMenu);
     }
 
+    // getter Nama
     public String getNama() {
         return nama;
     }
 
+    // getter Menu
     public ArrayList<Menu> getMenu() {
         return menu;
     }
     
-    // TODO: tambahkan methods yang diperlukan untuk class ini
 }
