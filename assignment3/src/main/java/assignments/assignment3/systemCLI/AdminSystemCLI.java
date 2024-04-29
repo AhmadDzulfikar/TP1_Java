@@ -3,7 +3,7 @@ package assignments.assignment3.systemCLI;
 import java.util.Scanner;
 
 //TODO: Extends Abstract yang diberikan
-public class AdminSystemCLI {
+public class AdminSystemCLI extends UserSystemCLI {
 
     //TODO: Tambahkan modifier dan buatlah metode ini mengoverride dari Abstract class
     boolean handleMenu(int command){

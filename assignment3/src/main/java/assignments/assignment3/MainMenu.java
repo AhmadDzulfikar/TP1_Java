@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import assignments.assignment2.Restaurant;
-import assignments.assignment2.User;
-import assignments.assignment3.LoginManager
+// import assignments.assignment2.User;
+import assignments.assignment3.LoginManager;
 import assignments.assignment3.payment.CreditCardPayment;
 import assignments.assignment3.payment.DebitPayment;
 import assignments.assignment3.systemCLI.AdminSystemCLI;
@@ -43,7 +43,7 @@ public class MainMenu {
 
         input.close();
     }
-
+    
     private void login(){
         System.out.println("\nSilakan Login:");
         System.out.print("Nama: ");
@@ -52,10 +52,14 @@ public class MainMenu {
         String noTelp = input.nextLine();
 
         // TODO: Validasi input login
+        
+        
 
         User userLoggedIn; // TODO: lengkapi
+        
+        // userLoggedIn = getUser(nama, noTelp);
 
-        loginManager.getSystem(userLoggedIn.role);
+        // loginManager.getSystem(userLoggedIn.role);
     }
 
     private static void printHeader(){
@@ -80,15 +84,10 @@ public class MainMenu {
 
     public static void initUser(){
         userList = new ArrayList<User>();
-
         //TODO: Adjust constructor dan atribut pada class User di Assignment 2
         userList.add(new User("Thomas N", "9928765403", "thomas.n@gmail.com", "P", "Customer", new DebitPayment(), 500000));
         userList.add(new User("Sekar Andita", "089877658190", "dita.sekar@gmail.com", "B", "Customer", new CreditCardPayment(), 2000000));
-        userList.add(new User("Sofita Yasusa", "084789607222", "sofita.susa@gmail.com", "T", "Customer", new DebitPayment(), 750000));
-        userList.add(new User("Dekdepe G", "080811236789", "ddp2.gampang@gmail.com", "S", "Customer", new CreditCardPayment(), 1800000));
-        userList.add(new User("Aurora Anum", "087788129043", "a.anum@gmail.com", "U", "Customer", new DebitPayment(), 650000));
-
+        
         userList.add(new User("Admin", "123456789", "admin@gmail.com", "-", "Admin", new CreditCardPayment(), 0));
-        userList.add(new User("Admin Baik", "9123912308", "admin.b@gmail.com", "-", "Admin", new CreditCardPayment(), 0));
     }
 }

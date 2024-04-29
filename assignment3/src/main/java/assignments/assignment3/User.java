@@ -1,7 +1,8 @@
-package assignments.assignment2;
+package assignments.assignment3;
 
 import java.util.ArrayList;
-
+import assignments.assignment2.Order;
+import assignments.assignment3.payment.DepeFoodPaymentSystem;
 public class User {
     // Attributes
     private String nama;
@@ -10,8 +11,10 @@ public class User {
     private String lokasi;
     public String role;
     private ArrayList<Order> orderHistory = new ArrayList<>();
+    private DepeFoodPaymentSystem payment;
+    private long saldo;
 
-    public User(String nama, String nomorTelepon, String email, String lokasi, String role){
+    public User(String nama, String nomorTelepon, String email, String lokasi, String role, DepeFoodPaymentSystem payment, long saldo){
         // Konstruktor
         this.nama = nama;
         this.nomortelepon = nomorTelepon;
@@ -19,26 +22,43 @@ public class User {
         this. lokasi = lokasi;
         this.role = role;
         this.orderHistory = new ArrayList<>();
+        this.payment = payment;
+        this.saldo = saldo;
     }
     // Getter 
+    public String getNama() {
+        return nama;
+    }
+
+    public String getNomorTelepon() {
+        return nomortelepon;
+    }
+    
     public String getEmail() {
         return email;
     }
 
-    public String getNama() {
-        return nama;
-    }
 
     public String getLokasi() {
         return lokasi;
     }
     
-    public String getNomorTelepon() {
-        return nomortelepon;
-    }
 
     public String getRole() {
         return role;
+    }
+
+    public DepeFoodPaymentSystem getPayment() {
+        return payment;
+    }
+
+    public long getSaldo() {
+        return saldo;
+    }
+
+    // Mengembalikan daftar pesanan user dalam orderHistory
+    public ArrayList<Order> getOrderHistory() {
+        return orderHistory;
     }
 
     // Setter
@@ -58,15 +78,9 @@ public class User {
         this.lokasi = lokasi;
     }
 
-
     // Menambahkan pesanan kedalam orderHistory user
     public void tambahPesanan(Order order) {
         orderHistory.add(order);
     }
-
-    // Mengembalikan daftar pesanan user dalam orderHistory
-
-    public ArrayList<Order> getOrderHistory() {
-        return orderHistory;
-    }
+    
 }
