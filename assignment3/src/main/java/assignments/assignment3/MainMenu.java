@@ -23,6 +23,7 @@ public class MainMenu {
     }
 
     public static void main(String[] args) {
+        initUser();
         MainMenu mainMenu = new MainMenu(new Scanner(System.in), new LoginManager(new AdminSystemCLI(), new CustomerSystemCLI()));
         mainMenu.run();
     }
@@ -51,15 +52,21 @@ public class MainMenu {
         System.out.print("Nomor Telepon: ");
         String noTelp = input.nextLine();
 
-        // TODO: Validasi input login
-        
-        
+        // Implementasi method untuk mendapat user dari userList
+        User userLoggedIn = null;
+        for (User user : userList) {
+            if (user.getNama().equals(nama) && user.getNomorTelepon().equals(noTelp)) {
+                userLoggedIn = user;
+                break;
+            }
+        }
 
-        User userLoggedIn; // TODO: lengkapi
-        
-        // userLoggedIn = getUser(nama, noTelp);
-
-        // loginManager.getSystem(userLoggedIn.role);
+        // Validasi input login
+        if (userLoggedIn == null) {
+            System.out.println("User tidak ditemukan, silahkan input user yang valid");
+            return;
+        } 
+            loginManager.getSystem(userLoggedIn.role).run();                 
     }
 
     private static void printHeader(){
@@ -84,10 +91,14 @@ public class MainMenu {
 
     public static void initUser(){
         userList = new ArrayList<User>();
-        //TODO: Adjust constructor dan atribut pada class User di Assignment 2
-        userList.add(new User("Thomas N", "9928765403", "thomas.n@gmail.com", "P", "Customer", new DebitPayment(), 500000));
+        //Adjust constructor dan atribut pada class User 
+        userList.add(new User("Thomas N", "12345678", "thomas.n@gmail.com", "P", "Customer", new DebitPayment(), 500000));
         userList.add(new User("Sekar Andita", "089877658190", "dita.sekar@gmail.com", "B", "Customer", new CreditCardPayment(), 2000000));
-        
+        userList.add(new User("Sofita Yasusa", "084789607222", "sofita.susa@gmail.com", "T", "Customer", new DebitPayment(), 750000));
+        userList.add(new User("Dekdepe G", "080811236789", "ddp2.gampang@gmail.com", "S", "Customer", new CreditCardPayment(), 1800000));
+        userList.add(new User("Aurora Anum", "087788129043", "a.anum@gmail.com", "U", "Customer", new DebitPayment(), 650000));
+
         userList.add(new User("Admin", "123456789", "admin@gmail.com", "-", "Admin", new CreditCardPayment(), 0));
+        userList.add(new User("Admin Baik", "9123912308", "admin.b@gmail.com", "-", "Admin", new CreditCardPayment(), 0));
     }
 }

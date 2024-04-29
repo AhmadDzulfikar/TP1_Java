@@ -1,5 +1,5 @@
 package assignments.assignment3;
-import assignments.assignment2.*;
+// import assignments.assignment2.*;
 
 import java.util.ArrayList;
 
@@ -22,6 +22,10 @@ public class Restaurant {
     // getter Nama
     public String getNama() {
         return nama;
+    }
+
+    public void addMenu(Menu newMenu){
+        menu.add(newMenu);
     }
 
     // getter Menu
