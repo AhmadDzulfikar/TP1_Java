@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
-import assignments.assignment2.Restaurant;
 // import assignments.assignment2.User;
 import assignments.assignment3.LoginManager;
 import assignments.assignment3.payment.CreditCardPayment;
 import assignments.assignment3.payment.DebitPayment;
 import assignments.assignment3.systemCLI.AdminSystemCLI;
 import assignments.assignment3.systemCLI.CustomerSystemCLI;
+import assignments.assignment3.*;
 
 public class MainMenu {
     private final Scanner input;
@@ -25,6 +25,7 @@ public class MainMenu {
     }
 
     public static void main(String[] args) {
+        restoList = new ArrayList<>();
         initUser();
         MainMenu mainMenu = new MainMenu(new Scanner(System.in), new LoginManager(new AdminSystemCLI(), new CustomerSystemCLI()));
         mainMenu.run();
@@ -62,7 +63,8 @@ public class MainMenu {
             System.out.println("User tidak ditemukan, silahkan input user yang valid");
             return;
         } 
-            loginManager.getSystem(userLoggedIn.role).run();                 
+        System.out.println("Selamat datang " + userLoggedIn.getNama());
+        loginManager.getSystem(userLoggedIn.role).run();     
     }
 
     public User getUser(String nama, String noTelp) {

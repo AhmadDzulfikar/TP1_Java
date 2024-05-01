@@ -8,8 +8,6 @@ import assignments.assignment3.*;
 
 // Extends Abstract UserSystemCLI
 public class AdminSystemCLI extends UserSystemCLI {
-
-    private static List<Restaurant> restoList = new ArrayList<>();
     private static Scanner input = new Scanner(System.in);
 
     //Tambahan modifier dan metode mengoverride dari Abstract class
@@ -45,7 +43,7 @@ public class AdminSystemCLI extends UserSystemCLI {
             restaurant = new Restaurant(namaRestaurant);
             restaurant = handleTambahMenuRestaurant(restaurant);
         }
-        restoList.add(restaurant);
+        MainMenu.getRestoList().add(restaurant);
         System.out.print("Restaurant "+restaurant.getNama()+" Berhasil terdaftar." );
     }
 
@@ -86,7 +84,7 @@ public class AdminSystemCLI extends UserSystemCLI {
         while (!isRestaurantNameValid) {
             System.out.print("Nama: ");
             String inputName = input.nextLine().trim();
-            boolean isRestaurantExist = restoList.stream()
+            boolean isRestaurantExist = MainMenu.getRestoList().stream()
                     .anyMatch(restoran -> restoran.getNama().toLowerCase().equals(inputName.toLowerCase()));
             boolean isRestaurantNameLengthValid = inputName.length() >= 4;
     
@@ -106,20 +104,24 @@ public class AdminSystemCLI extends UserSystemCLI {
 
     // Implementasi method untuk handle ketika admin ingin tambah restoran
     protected void handleHapusRestoran(){
-        System.out.println("--------------Hapus Restoran----------------");
-        boolean isActionDeleteEnded = false;
-        while (!isActionDeleteEnded) {
+        boolean restoDidapati = false;
+        while (!restoDidapati) {
+            System.out.println("\n____________________________________ HAPUS RESTORAN ____________________________________");
             System.out.print("Nama Restoran: ");
-            String restaurantName = input.nextLine().trim();
-            boolean isRestaurantExist = restoList.stream().anyMatch(restaurant -> restaurant.getNama().toLowerCase().equals(restaurantName.toLowerCase()));
-            if(!isRestaurantExist){
-                System.out.println("Restoran tidak terdaftar pada sistem.");
-                System.out.println();
+            String namaRestoran = input.nextLine();
+
+            for (int i = 0; i < MainMenu.getRestoList().size(); i++) {    // resto list = mengetahui berapa banyak resto yang terdaftar
+                Restaurant resto = MainMenu.getRestoList().get(i);    // Mengambil objek di MainMenu.getRestoList() sesuai indeks dan disimpan ke resto
+                if (resto.getNama().equalsIgnoreCase(namaRestoran)) {   // Ngebandingin yang ditemuin dengan yang diinput tanpa case sensitive
+                    MainMenu.getRestoList().remove(i);    // Kalo ketemu maka di hapus
+                    restoDidapati = true;   // ketika jadi true maka resto yang didapati terdaftar
+                    System.out.println("Restoran berhasil dihapus.");
+                    break;
+                }
             }
-            else{
-                restoList = new ArrayList<>(restoList.stream().filter(restaurant-> !restaurant.getNama().toLowerCase().equals(restaurantName.toLowerCase())).toList());
-                System.out.println("Restoran berhasil dihapus");
-                isActionDeleteEnded = true;
+
+            if (!restoDidapati) {
+                System.out.println("Restoran tidak terdaftar pada sistem.");
             }
         }
     }

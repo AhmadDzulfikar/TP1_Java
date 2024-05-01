@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 import assignments.assignment1.*;
 import assignments.assignment3.*;
 import assignments.assignment3.payment.CreditCardPayment;
-
+import assignments.assignment3.payment.DebitPayment;
 import assignments.assignment1.OrderGenerator;
 
 //Extends abstract class 
@@ -261,8 +261,6 @@ public class CustomerSystemCLI extends UserSystemCLI{
 
         } while (targetOrder == null);
 
-
-
         // Mencetak output
         System.out.println("\nBill:");
         System.out.println("Order ID: " + targetOrder.getOrderId()); // Class Order
@@ -287,14 +285,35 @@ public class CustomerSystemCLI extends UserSystemCLI{
         }
         System.out.println("Total Biaya: Rp " + totalBiaya);
 
+        
         // Untuk pilihan pembayaran user
         System.out.println("\nOpsi Pembayaran: ");
         System.out.println("1. Credit Card");
         System.out.println("2. Debit");
-
-        System.out.println("Pilihan Metode Pembayaran: ");
+        
+        System.out.print("Pilihan Metode Pembayaran: ");
         int metodePembayaran = input.nextInt();
         input.nextLine();
+
+        // Check if user has the payment method
+            if (metodePembayaran == 1 || metodePembayaran == 2) {
+                if (metodePembayaran == 1 && !(MainMenu.userLoggedIn.getPayment() instanceof CreditCardPayment) ||
+                    metodePembayaran == 2 && !(MainMenu.userLoggedIn.getPayment() instanceof DebitPayment)) {
+                    System.out.println("User belum memiliki metode pembayaran ini!");
+                    return;
+                }
+            }
+            
+        if (totalBiaya < 50000) {
+            System.out.println("Jumlah pesanan < 50000 mohon menggunakan metode pembayaran yang lain");
+            return;
+        }
+
+        if (totalBiaya > MainMenu.userLoggedIn.getSaldo()) {
+            System.out.println("Saldo tidak mencukupi mohon menggunakan metode pembayaran yang lain");
+            return;
+        }
+
 
         if (metodePembayaran == 1) {
             // ____Membayar menggunakan Credit card

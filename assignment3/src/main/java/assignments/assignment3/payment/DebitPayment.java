@@ -10,7 +10,6 @@ public class DebitPayment implements DepeFoodPaymentSystem{
     // Mengimplementasi method dari inheritance
     @Override
     public long processPayment(long amount) {
-        
         return amount;
     }
 
