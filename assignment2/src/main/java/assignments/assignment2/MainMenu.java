@@ -331,7 +331,6 @@ public class MainMenu {
             totalBiaya += menu.getHarga();
         }
         System.out.println("Total Biaya: Rp " + totalBiaya);
-    
     }
     public static void handleLihatMenu(){
         System.out.println("-----------------Lihat Menu-----------------");

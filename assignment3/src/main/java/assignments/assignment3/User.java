@@ -3,6 +3,7 @@ package assignments.assignment3;
 import java.util.ArrayList;
 // import assignments.assignment2.Order;
 import assignments.assignment3.payment.DepeFoodPaymentSystem;
+import assignments.assignment2.*;
 public class User {
     // Attributes
     private String nama;
@@ -54,6 +55,10 @@ public class User {
 
     public long getSaldo() {
         return saldo;
+    }
+
+    public void setSaldo(long saldo) {
+        this.saldo = saldo;
     }
 
     // Mengembalikan daftar pesanan user dalam orderHistory

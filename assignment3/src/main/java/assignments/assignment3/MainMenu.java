@@ -2,6 +2,7 @@ package assignments.assignment3;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 import assignments.assignment2.Restaurant;
 // import assignments.assignment2.User;
@@ -16,6 +17,7 @@ public class MainMenu {
     private final LoginManager loginManager;
     private static ArrayList<Restaurant> restoList;
     private static ArrayList<User> userList;
+    public static User userLoggedIn;
 
     public MainMenu(Scanner in, LoginManager loginManager) {
         this.input = in;
@@ -53,13 +55,7 @@ public class MainMenu {
         String noTelp = input.nextLine();
 
         // Implementasi method untuk mendapat user dari userList
-        User userLoggedIn = null;
-        for (User user : userList) {
-            if (user.getNama().equals(nama) && user.getNomorTelepon().equals(noTelp)) {
-                userLoggedIn = user;
-                break;
-            }
-        }
+    userLoggedIn = getUser(nama, noTelp);
 
         // Validasi input login
         if (userLoggedIn == null) {
@@ -67,6 +63,15 @@ public class MainMenu {
             return;
         } 
             loginManager.getSystem(userLoggedIn.role).run();                 
+    }
+
+    public User getUser(String nama, String noTelp) {
+        for (User user : userList) {
+            if (user.getNama().equals(nama) && user.getNomorTelepon().equals(noTelp)) {
+                return user;
+            }
+        }
+        return null;
     }
 
     private static void printHeader(){
@@ -92,7 +97,7 @@ public class MainMenu {
     public static void initUser(){
         userList = new ArrayList<User>();
         //Adjust constructor dan atribut pada class User 
-        userList.add(new User("Thomas N", "12345678", "thomas.n@gmail.com", "P", "Customer", new DebitPayment(), 500000));
+        userList.add(new User("Thomas N", "123456789", "thomas.n@gmail.com", "P", "Customer", new DebitPayment(), 500000));
         userList.add(new User("Sekar Andita", "089877658190", "dita.sekar@gmail.com", "B", "Customer", new CreditCardPayment(), 2000000));
         userList.add(new User("Sofita Yasusa", "084789607222", "sofita.susa@gmail.com", "T", "Customer", new DebitPayment(), 750000));
         userList.add(new User("Dekdepe G", "080811236789", "ddp2.gampang@gmail.com", "S", "Customer", new CreditCardPayment(), 1800000));
@@ -100,5 +105,13 @@ public class MainMenu {
 
         userList.add(new User("Admin", "123456789", "admin@gmail.com", "-", "Admin", new CreditCardPayment(), 0));
         userList.add(new User("Admin Baik", "9123912308", "admin.b@gmail.com", "-", "Admin", new CreditCardPayment(), 0));
+    }
+
+    public static ArrayList<Restaurant> getRestoList() {
+        return restoList;
+    }
+
+    public static ArrayList<User> getUserList() {
+        return userList;
     }
 }

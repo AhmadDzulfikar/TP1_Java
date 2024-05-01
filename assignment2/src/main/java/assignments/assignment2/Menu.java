@@ -19,4 +19,4 @@ public class Menu {
     public double getHarga() {
         return harga;
     }
-}
+}   

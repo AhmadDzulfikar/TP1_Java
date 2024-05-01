@@ -61,7 +61,7 @@ public class AdminSystemCLI extends UserSystemCLI {
             String namaMenu = String.join(" ", Arrays.copyOfRange(splitter, 0, splitter.length - 1));
             if(isDigit){
                 int hargaMenu = Integer.parseInt(hargaStr);
-                restoran.addMenu(new Menu(namaMenu, hargaMenu));
+                restoran.tambahMenu(new Menu(namaMenu, hargaMenu));
             }
             else{
                 isMenuValid = false;

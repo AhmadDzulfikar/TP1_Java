@@ -1,17 +1,17 @@
 package assignments.assignment3;
-// import assignments.assignment2.*;
-
 import java.util.ArrayList;
 
 public class Restaurant {
     // attributes
     private String nama;
     private ArrayList<Menu> menu;
+    private long saldo;
     
     public Restaurant(String nama){
         // Konstruktor
         this.nama = nama;
         this.menu = new ArrayList<>();
+        this.saldo = saldo;
     }
 
     // Metode untuk menambahkan menu baru
@@ -24,10 +24,6 @@ public class Restaurant {
         return nama;
     }
 
-    public void addMenu(Menu newMenu){
-        menu.add(newMenu);
-    }
-
     // getter Menu
     public ArrayList<Menu> getMenu() {
         return menu;
@@ -36,4 +32,13 @@ public class Restaurant {
     public void setMenu(ArrayList<Menu> menu) {
         this.menu = menu;
     }
+
+    public long getSaldo() {
+        return saldo;
+    }
+
+    public void setSaldo(long saldo) {
+        this.saldo = saldo;
+    }
+
 }
