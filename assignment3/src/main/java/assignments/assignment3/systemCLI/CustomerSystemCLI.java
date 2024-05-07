@@ -303,7 +303,7 @@ public class CustomerSystemCLI extends UserSystemCLI{
                     return;
                 }
             }
-            
+
         if (totalBiaya < 50000) {
             System.out.println("Jumlah pesanan < 50000 mohon menggunakan metode pembayaran yang lain");
             return;

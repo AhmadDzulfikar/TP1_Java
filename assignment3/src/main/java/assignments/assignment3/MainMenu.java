@@ -99,7 +99,7 @@ public class MainMenu {
     public static void initUser(){
         userList = new ArrayList<User>();
         //Adjust constructor dan atribut pada class User 
-        userList.add(new User("Thomas N", "123456789", "thomas.n@gmail.com", "P", "Customer", new DebitPayment(), 500000));
+        userList.add(new User("Thomas N", "9928765403", "thomas.n@gmail.com", "P", "Customer", new DebitPayment(), 500000));
         userList.add(new User("Sekar Andita", "089877658190", "dita.sekar@gmail.com", "B", "Customer", new CreditCardPayment(), 2000000));
         userList.add(new User("Sofita Yasusa", "084789607222", "sofita.susa@gmail.com", "T", "Customer", new DebitPayment(), 750000));
         userList.add(new User("Dekdepe G", "080811236789", "ddp2.gampang@gmail.com", "S", "Customer", new CreditCardPayment(), 1800000));
