@@ -108,7 +108,7 @@ public class MainMenu {
         userList.add(new User("Admin", "123456789", "admin@gmail.com", "-", "Admin", new CreditCardPayment(), 0));
         userList.add(new User("Admin Baik", "9123912308", "admin.b@gmail.com", "-", "Admin", new CreditCardPayment(), 0));
     }
-    // tess
+    // tesss
     public static ArrayList<Restaurant> getRestoList() {
         return restoList;
     }
