@@ -1,14 +1,18 @@
 package assignments.assignment3.payment;
 
-public class DebitPayment implements DepeFoodPaymentSystem{
-    
-    // Properti
-    private static final double MINIMUM_TOTAL_PRICE = 50000; // Minimal harga yang harus dipesan
+public class DebitPayment implements DepeFoodPaymentSystem {
+    private static final double MINIMUM_PAYMENT = 50000;
 
-    // Mengimplementasi method dari inheritance
     @Override
-    public long processPayment(long amount) {
+    public long processPayment(long saldo, long amount) throws Exception {
+        if (amount < MINIMUM_PAYMENT) {
+            throw new Exception("Jumlah pesanan < 50000 mohon menggunakan metode pembayaran yang lain");
+        }
+
+        if (saldo < amount) {
+            throw new Exception("Saldo tidak mencukupi mohon menggunakan metode pembayaran yang lain");
+        }
+
         return amount;
     }
-
 }

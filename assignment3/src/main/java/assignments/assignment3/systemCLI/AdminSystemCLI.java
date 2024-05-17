@@ -1,28 +1,25 @@
 package assignments.assignment3.systemCLI;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
-import assignments.assignment3.*;
 
-// Extends Abstract UserSystemCLI
+import assignments.assignment3.Menu;
+import assignments.assignment3.Restaurant;
+
 public class AdminSystemCLI extends UserSystemCLI {
-    private static Scanner input = new Scanner(System.in);
 
-    //Tambahan modifier dan metode mengoverride dari Abstract class
     @Override
-    boolean handleMenu(int command){
-        switch(command){
+    boolean handleMenu(int command) {
+        switch (command) {
             case 1 -> handleTambahRestoran();
             case 2 -> handleHapusRestoran();
-            case 3 -> {return false;}
+            case 3 -> {
+                return false;
+            }
             default -> System.out.println("Perintah tidak diketahui, silakan coba kembali");
         }
         return true;
     }
 
-    //Tambahan modifier dan metode ini mengoverride dari Abstract class
     @Override
     void displayMenu() {
         System.out.println("\n--------------------------------------------");
@@ -34,8 +31,7 @@ public class AdminSystemCLI extends UserSystemCLI {
         System.out.print("Pilihan menu: ");
     }
 
-    // Implementasi method untuk handle ketika admin ingin tambah restoran
-    protected void handleTambahRestoran(){
+    private void handleTambahRestoran() {
         System.out.println("--------------Tambah Restoran---------------");
         Restaurant restaurant = null;
         while (restaurant == null) {
@@ -43,86 +39,54 @@ public class AdminSystemCLI extends UserSystemCLI {
             restaurant = new Restaurant(namaRestaurant);
             restaurant = handleTambahMenuRestaurant(restaurant);
         }
-        MainMenu.getRestoList().add(restaurant);
-        System.out.print("Restaurant "+restaurant.getNama()+" Berhasil terdaftar." );
+        restoList.add(restaurant);
+        System.out.print("Restaurant " + restaurant.getNama() + " Berhasil terdaftar.");
     }
 
-    public static Restaurant handleTambahMenuRestaurant(Restaurant restoran){
+    private Restaurant handleTambahMenuRestaurant(Restaurant restoran) {
         System.out.print("Jumlah Makanan: ");
-        int  jumlahMenu = Integer.parseInt(input.nextLine().trim());
+        int jumlahMenu = Integer.parseInt(input.nextLine().trim());
         boolean isMenuValid = true;
-        for(int i = 0; i < jumlahMenu; i++){
+        for (int i = 0; i < jumlahMenu; i++) {
             String inputValue = input.nextLine().trim();
             String[] splitter = inputValue.split(" ");
-            String hargaStr = splitter[splitter.length-1];
+            String hargaStr = splitter[splitter.length - 1];
             boolean isDigit = checkIsDigit(hargaStr);
             String namaMenu = String.join(" ", Arrays.copyOfRange(splitter, 0, splitter.length - 1));
-            if(isDigit){
+            if (isDigit) {
                 int hargaMenu = Integer.parseInt(hargaStr);
-                restoran.tambahMenu(new Menu(namaMenu, hargaMenu));
-            }
-            else{
+                restoran.addMenu(new Menu(namaMenu, hargaMenu));
+            } else {
                 isMenuValid = false;
             }
         }
-        if(!isMenuValid){
+        if (!isMenuValid) {
             System.out.println("Harga menu harus bilangan bulat!");
             System.out.println();
         }
 
-        return isMenuValid? restoran : null; 
+        return isMenuValid ? restoran : null;
     }
 
-    public static boolean checkIsDigit(String digits){
-        return  digits.chars().allMatch(Character::isDigit);
-    }
-    
-    public static String getValidRestaurantName() {
-        String name = "";
-        boolean isRestaurantNameValid = false;
-    
-        while (!isRestaurantNameValid) {
-            System.out.print("Nama: ");
-            String inputName = input.nextLine().trim();
-            boolean isRestaurantExist = MainMenu.getRestoList().stream()
-                    .anyMatch(restoran -> restoran.getNama().toLowerCase().equals(inputName.toLowerCase()));
-            boolean isRestaurantNameLengthValid = inputName.length() >= 4;
-    
-            if (isRestaurantExist) {
-                System.out.printf("Restoran dengan nama %s sudah pernah terdaftar. Mohon masukkan nama yang berbeda!%n", inputName);
-                System.out.println();
-            } else if (!isRestaurantNameLengthValid) {
-                System.out.println("Nama Restoran tidak valid! Minimal 4 karakter diperlukan.");
+    private void handleHapusRestoran() {
+        System.out.println("--------------Hapus Restoran----------------");
+        boolean isActionDeleteEnded = false;
+        while (!isActionDeleteEnded) {
+            System.out.print("Nama Restoran: ");
+            String restaurantName = input.nextLine().trim();
+            boolean isRestaurantExist = restoList.stream()
+                    .anyMatch(restaurant -> restaurant.getNama().toLowerCase().equals(restaurantName.toLowerCase()));
+            if (!isRestaurantExist) {
+                System.out.println("Restoran tidak terdaftar pada sistem.");
                 System.out.println();
             } else {
-                name = inputName;
-                isRestaurantNameValid = true;
-            }
-        }
-        return name;
-    }
+                restoList.removeIf(
+                        restaurant -> restaurant.getNama().toLowerCase().equals(restaurantName.toLowerCase()));
 
-    // Implementasi method untuk handle ketika admin ingin tambah restoran
-    protected void handleHapusRestoran(){
-        boolean restoDidapati = false;
-        while (!restoDidapati) {
-            System.out.println("\n____________________________________ HAPUS RESTORAN ____________________________________");
-            System.out.print("Nama Restoran: ");
-            String namaRestoran = input.nextLine();
-
-            for (int i = 0; i < MainMenu.getRestoList().size(); i++) {    // resto list = mengetahui berapa banyak resto yang terdaftar
-                Restaurant resto = MainMenu.getRestoList().get(i);    // Mengambil objek di MainMenu.getRestoList() sesuai indeks dan disimpan ke resto
-                if (resto.getNama().equalsIgnoreCase(namaRestoran)) {   // Ngebandingin yang ditemuin dengan yang diinput tanpa case sensitive
-                    MainMenu.getRestoList().remove(i);    // Kalo ketemu maka di hapus
-                    restoDidapati = true;   // ketika jadi true maka resto yang didapati terdaftar
-                    System.out.println("Restoran berhasil dihapus.");
-                    break;
-                }
-            }
-
-            if (!restoDidapati) {
-                System.out.println("Restoran tidak terdaftar pada sistem.");
+                System.out.println("Restoran berhasil dihapus");
+                isActionDeleteEnded = true;
             }
         }
     }
+
 }
