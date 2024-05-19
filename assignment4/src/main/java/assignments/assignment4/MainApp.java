@@ -10,6 +10,7 @@ import assignments.assignment4.page.AdminMenu;
 import assignments.assignment4.page.CustomerMenu;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
 public class MainApp extends Application {
@@ -58,6 +59,27 @@ public class MainApp extends Application {
     public void logout() {
         setUser(null); // Clear the current user
         setScene(getScene("Login")); // Switch to the login scene
+    }
+
+    public void login(String nama, String nomorTelepon) {
+        User user = DepeFood.handleLogin(nama, nomorTelepon);
+        if (user != null) {
+            // Setelah login berhasil, buat dan tampilkan CustomerMenu
+            CustomerMenu customerMenu = new CustomerMenu(window, this, user);
+            window.setScene(customerMenu.getScene());
+            window.show();
+        } else {
+            // Tampilkan pesan kesalahan atau lakukan tindakan lain jika login gagal
+            showAlert("Login Gagal", "Nama atau nomor telepon salah. Silakan coba lagi.");
+        }
+    }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     public static void main(String[] args) {

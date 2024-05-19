@@ -30,6 +30,17 @@ public class Order {
         this.orderFinished = orderFinished;
     }
 
+    // // Getter for pengirimanSelesai
+    // public boolean isPengirimanSelesai() {
+    //     return pengirimanSelesai; 
+    // }
+
+    // //-------- 
+    // // Untuk mengatur apakah pengiriman Selesai atau Belum Selesai
+    // public void setPengirimanSelesai(boolean pengirimanSelesai) {
+    //     this.pengirimanSelesai = pengirimanSelesai;
+    // }
+
     public String getOrderId() {
         return orderId;
     }
@@ -71,5 +82,10 @@ public class Order {
             sum += menu.getHarga();
         }
         return sum += getOngkir();
+    }
+
+    // Getter for lokasi (assuming it's the restaurant's location)
+    public String getLokasi() {
+        return restaurant.getNama();
     }
 }

@@ -167,21 +167,21 @@ public class MainMenu {
         symbols.setGroupingSeparator('.');
         decimalFormat.setDecimalFormatSymbols(symbols);
         return String.format("Bill:%n" +
-                         "Order ID: %s%n" +
-                         "Tanggal Pemesanan: %s%n" +
-                         "Lokasi Pengiriman: %s%n" +
-                         "Status Pengiriman: %s%n"+
-                         "Pesanan:%n%s%n"+
-                         "Biaya Ongkos Kirim: Rp %s%n"+
-                         "Total Biaya: Rp %s%n",
-                         order.getOrderId(),
-                         order.getTanggal(),
-                         userLoggedIn.getLokasi(),
-                         !order.getOrderFinished()? "Not Finished":"Finished",
-                         getMenuPesananOutput(order),
-                         decimalFormat.format(order.getOngkir()),
-                         decimalFormat.format(order.getTotalHarga())
-                         );
+                        "Order ID: %s%n" +
+                        "Tanggal Pemesanan: %s%n" +
+                        "Lokasi Pengiriman: %s%n" +
+                        "Status Pengiriman: %s%n"+
+                        "Pesanan:%n%s%n"+
+                        "Biaya Ongkos Kirim: Rp %s%n"+
+                        "Total Biaya: Rp %s%n",
+                        order.getOrderId(),
+                        order.getTanggal(),
+                        userLoggedIn.getLokasi(),
+                        !order.getOrderFinished()? "Not Finished":"Finished",
+                        getMenuPesananOutput(order),
+                        decimalFormat.format(order.getOngkir()),
+                        decimalFormat.format(order.getTotalHarga())
+                        );
     }
 
 

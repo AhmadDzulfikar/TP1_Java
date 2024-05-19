@@ -23,6 +23,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import assignments.assignment4.MainApp;
 import assignments.assignment4.page.AdminMenu;
@@ -66,6 +67,7 @@ public class LoginForm {
         grid.add(namLabel, 0, 1);
 
         nameInput = new TextField(); 
+        nameInput.setPromptText("Ex. Thomas N");
         grid.add(nameInput, 1, 1);
 
         // No Telp
@@ -73,6 +75,7 @@ public class LoginForm {
         grid.add(phonLabel, 0, 2);
 
         phoneInput = new TextField();
+        phoneInput.setPromptText("Ex. 9928765403");
         grid.add(phoneInput, 1, 2);
 
         // Button Login
@@ -80,7 +83,7 @@ public class LoginForm {
         loginButton.setOnAction(e -> handleLogin());
         grid.add(loginButton, 1, 3);
 
-        return new Scene(grid, 1746, 9 60);
+        return new Scene(grid, 400, 600);
     }
 
     public void setBackground(Pane grid, String imageUrl) {
