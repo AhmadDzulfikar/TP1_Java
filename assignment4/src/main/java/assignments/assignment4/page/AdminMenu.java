@@ -350,6 +350,7 @@ public class AdminMenu extends MemberMenu {
         return new Scene(grid, 400, 600);
     }
 
+// FITUR KE - 1 -----------------------------------------------------------------------------------------
     private Scene createAddRestaurantForm() {
         VBox layout = new VBox(10);
         layout.setPadding(new Insets(20));  // Padding untuk textField
@@ -381,6 +382,7 @@ public class AdminMenu extends MemberMenu {
         return new Scene(layout, 400, 600);
     }
 
+// FITUR KE - 2 -----------------------------------------------------------------------------------------
     // Method untuk membuat menu 
     private Scene createAddMenuForm() {
         VBox layout = new VBox(10);
@@ -436,6 +438,7 @@ public class AdminMenu extends MemberMenu {
         return new Scene(layout, 400, 600);
     }
 
+// FITUR KE - 3 -----------------------------------------------------------------------------------------
     // Method untuk membuat view restaurant menunya
     private Scene createViewRestaurantsForm() {
         VBox layout = new VBox(10);
@@ -470,6 +473,7 @@ public class AdminMenu extends MemberMenu {
         return new Scene(layout, 400, 600);
     }
 
+// FITUR UNTUK HANDLE-HANDLE -----------------------------------------------------------------------------------------
     private void handleTambahRestoran(String nama) {
         String validName = DepeFood.getValidRestaurantName(nama);
         if (!validName.startsWith("Restoran dengan nama")) {
@@ -506,6 +510,7 @@ public class AdminMenu extends MemberMenu {
         return DepeFood.getRestoList().stream().map(Restaurant::getNama).collect(Collectors.toList());  // mengunmpulkan hasil dari operasi map menjadi List<String>.
     }
 
+// FITUR SHOW ALERT -----------------------------------------------------------------------------------------
     protected void showAlert(String title, String header, String content, Alert.AlertType c) {
         Alert alert = new Alert(c);
         alert.setTitle(title);
@@ -514,6 +519,7 @@ public class AdminMenu extends MemberMenu {
         alert.showAndWait();
     }
 
+// FITUR REFRESH -----------------------------------------------------------------------------------------
     protected void refresh(){
         updateComboBoxRestaurants(); // Refresh the combo box items with the latest restaurant names
 
