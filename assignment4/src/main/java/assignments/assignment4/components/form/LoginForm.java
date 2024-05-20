@@ -47,12 +47,14 @@ public class LoginForm {
         this.stage.setResizable(false);
     }
 
+    // Tampilan dari UI Login form
     private Scene createLoginForm() {
         // Implementasi method menampilkan komponen form login
         VBox vbox = new VBox(20);
         vbox.setAlignment(Pos.CENTER);
         vbox.setPadding(new Insets(25, 25, 25, 50));
 
+        // Source untuk menampilkan background
         String currentPath = System.getProperty("user.dir");
         String imageUrl = "file:" + currentPath + "\\src\\main\\java\\assignments\\assignment4\\images\\LoginPageSatu.png";
         setBackground(vbox, imageUrl);
@@ -81,18 +83,19 @@ public class LoginForm {
         HBox loginBox = new HBox(30);
         loginBox.setAlignment(Pos.CENTER_LEFT);
         Button loginButton = new Button("Login");
-        loginButton.setPrefSize(300, 40); // Set size for Button
-        loginButton.setFont(Font.font("Arial", FontWeight.BOLD, 16)); // Set font size for Button
+        loginButton.setPrefSize(300, 40); // atur size untuk Button
+        loginButton.setFont(Font.font("Arial", FontWeight.BOLD, 16)); // atur font size untuk Button
         loginButton.setStyle("-fx-background-color: #FDBD98; -fx-background-radius: 10; -fx-border-radius: 10; -fx-text-fill: white;");
         loginBox.getChildren().addAll(loginButton);
         loginButton.setOnAction(e -> handleLogin());
 
-        // Add all components to vbox
+        // Masukkan semua components ke vbox
         vbox.getChildren().addAll(nameBox, phoneBox, loginBox);
 
         return new Scene(vbox, 940, 527);
     }
 
+    // Tampilan Background
     public void setBackground(Pane pane, String imageUrl) {
         Image image = new Image(imageUrl);
         BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, 
@@ -101,6 +104,7 @@ public class LoginForm {
         pane.setBackground(background);
     }
 
+    // Method mengatur/handle si login
     private void handleLogin() {
         // Implementasi validasi isian form login
         String username = nameInput.getText();
@@ -141,6 +145,7 @@ public class LoginForm {
         }
     }
 
+    // Untuk clear textfieldnya setiap ada yang login
     private void clearTextFields() {
         nameInput.clear();
         phoneInput.clear();
