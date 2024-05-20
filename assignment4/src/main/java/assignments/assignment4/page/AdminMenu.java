@@ -1,6 +1,6 @@
 package assignments.assignment4.page;
 
-import java.util.ArrayList;
+// import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,7 +27,7 @@ import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
-import javafx.scene.layout.GridPane;
+// import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -38,6 +38,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class AdminMenu extends MemberMenu {
+    // Instance variable
     private Stage stage;
     private Scene scene;
     private User user;
@@ -51,6 +52,7 @@ public class AdminMenu extends MemberMenu {
     private ComboBox<String> restaurantComboBoxAddMenu = new ComboBox<>();  // Menampilkan daftar nama restoran saat ingin membuat resto
     private ComboBox<String> restaurantComboBoxViewRestaurants = new ComboBox<>(); // Menampilkan daftar nama restoran saat ingin membuat view menu
 
+    // Konstruktor
     public AdminMenu(Stage stage, MainApp mainApp, User user) {
         this.stage = stage;
         this.mainApp = mainApp;
@@ -61,34 +63,34 @@ public class AdminMenu extends MemberMenu {
         this.viewRestaurantsScene = createViewRestaurantsForm(new Stage());
     }
 
+    // Menampilkan menu untuk Customer
     public Scene createBaseMenu() {
-        // Menampilkan menu untuk Customer
-
-        // Create the layout for the Customer Menu
+        // Membuat layout untuk Customer Menu
         VBox menuLayout = new VBox(30);
         menuLayout.setAlignment(Pos.BOTTOM_CENTER);
 
-        // Create the horizontal box for the welcome label
+        // Membuat horizontal box untuk welcome label
         HBox topLayout = new HBox();
         topLayout.setPadding(new Insets(20));
         topLayout.setAlignment(Pos.TOP_LEFT);
 
-        // Create the horizontal box for buttons
+        // Membuat horizontal box untuk buttons
         HBox buttonLayout = new HBox(50);
         menuLayout.setPadding(new Insets(0, 20, 30, 20));
         buttonLayout.setAlignment(Pos.BOTTOM_CENTER);
 
-        // Create welcome label
+        // Membuat welcome label
         Label welcomeLabel = new Label("Welcome " + user.getNama());
         welcomeLabel.setTextFill(Color.WHITE);
         welcomeLabel.setFont(Font.font("Arial", FontWeight.BOLD, 20));
 
+        // Membuat source untuk image
         String currentPath = System.getProperty("user.dir");
 
         String imageUrl = "file:" + currentPath + "\\src\\main\\java\\assignments\\assignment4\\images\\MainMenuAdmin.png";
         setBackground(menuLayout, imageUrl);
 
-        // Create buttons
+        // Create buttons untuk pergi ke halaman-halaman
         Button buatPesananPage = new Button("TAMBAH RESTO");
         buatPesananPage.setPrefSize(200, 30);
         buatPesananPage.setStyle("-fx-background-color: #3F90AE; -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold;");
@@ -123,21 +125,21 @@ public class AdminMenu extends MemberMenu {
         backButton.setOnAction(e -> showLogoutDialog());
         // backButton.setOnAction(e -> showLogoutDialog());
 
-        // Add buttons to the horizontal box
+        // tambah buttons ke horizontal box
         buttonLayout.getChildren().addAll(buatPesananPage, cetakBillPage, bayarBillPage, backButton);
 
-        // Add welcome label to the top layout
+        // tambah welcome label ke top layout
         topLayout.getChildren().add(welcomeLabel);
 
-        // Add the button layout and logout button to the vertical layout
+        // tambah button layout dan logout button ke vertical layout
         menuLayout.getChildren().addAll(buttonLayout);
 
-        // Create the scene with the layout
-        // return new Scene(menuLayout, 950, 527);
+        // Membuat scene dengan layout
         return new Scene(menuLayout, 940, 527);
 
     }
 
+    // Untuk background
     public void setBackground(Pane pane, String imageUrl) {
         Image image = new Image(imageUrl);
         BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, 
@@ -147,6 +149,7 @@ public class AdminMenu extends MemberMenu {
     }
 
 // FITUR KE - 1 -----------------------------------------------------------------------------------------
+// Membuat/Daftar restaurant
 private Scene createAddRestaurantForm(Stage dialogStage) {
     VBox layout = new VBox(10);
     layout.setPadding(new Insets(20));  // Padding untuk textField
@@ -166,7 +169,7 @@ private Scene createAddRestaurantForm(Stage dialogStage) {
         String restaurantName = nameField.getText().trim();
         if (!restaurantName.isEmpty()) {
             handleTambahRestoran(restaurantName);
-            nameField.clear();  // This line can be removed as refresh() will handle the clearing
+            nameField.clear(); 
             refresh();
         } else {
             showAlert("Warning", "Warning", "Nama restoran tidak boleh kosong!", Alert.AlertType.WARNING);
@@ -185,6 +188,7 @@ private Scene createAddRestaurantForm(Stage dialogStage) {
     return new Scene(layout, 400, 600);
 }
 
+    // Untuk menjadikannya dialog/pop up (tampilan)
     private void showCreateAddRestaurantDialog() {
         Stage dialog = new Stage();
         dialog.initModality(Modality.WINDOW_MODAL);
@@ -196,12 +200,13 @@ private Scene createAddRestaurantForm(Stage dialogStage) {
     }
 
 // FITUR KE - 2 -----------------------------------------------------------------------------------------
-    // Method untuk membuat menu 
+    // Method untuk membuat menu dari restaurant yang dipilih
     private Scene createAddMenuForm(Stage dialogStage) {
         VBox layout = new VBox(10);
         layout.setStyle("-fx-background-color: #092C5B;");
         layout.setPadding(new Insets(20));
 
+        // Label si restaurant dan combobox
         Label restaurantLabel = new Label("Restaurant Name: ");
         restaurantLabel.setTextFill(Color.WHITE); // Atur warna teks menjadi putih
         restaurantComboBoxAddMenu.setItems(FXCollections.observableArrayList(getRestoNames()));
@@ -260,6 +265,7 @@ private Scene createAddRestaurantForm(Stage dialogStage) {
         return new Scene(layout, 400, 600);
     }
 
+    // sebuah dialog or pop up
     private void showCreateAddMenuDialog() {
         Stage dialog = new Stage();
         dialog.initModality(Modality.WINDOW_MODAL);
@@ -285,6 +291,7 @@ private Scene createAddRestaurantForm(Stage dialogStage) {
 
         menuItemsListView = new ListView<>();
 
+        // Tampilan untuk makanannya di listView
         restaurantComboBoxViewRestaurants.setOnAction(e -> {
             String selectedRestaurant = restaurantComboBoxViewRestaurants.getValue();
             if (selectedRestaurant != null) {
@@ -301,6 +308,7 @@ private Scene createAddRestaurantForm(Stage dialogStage) {
 
         layout.getChildren().addAll(restaurantLabel, restaurantComboBoxViewRestaurants, menuItemsListView);
 
+        // kembali
         Button backButton = new Button("Kembali");
         backButton.setPrefSize(100, 0); // Atur tinggi dan lebar tombol
         backButton.setStyle("-fx-background-color: #FDBD98; -fx-text-fill: white;"); // Set warna latar belakang dan teks tombol
@@ -310,6 +318,7 @@ private Scene createAddRestaurantForm(Stage dialogStage) {
         return new Scene(layout, 400, 600);
     }
 
+    // pop up
     private void showCreateViewRestaurantsDialog() {
         Stage dialog = new Stage();
         dialog.initModality(Modality.WINDOW_MODAL);
@@ -356,6 +365,7 @@ private Scene createAddRestaurantForm(Stage dialogStage) {
     }
     
 
+    // Combobox
     private void updateComboBoxRestaurants() {
         List<String> restaurantNames = getRestoNames(); // mendapatkan daftar nama restoran yang tersedia.
         restaurantComboBoxAddMenu.setItems(FXCollections.observableArrayList(restaurantNames));
