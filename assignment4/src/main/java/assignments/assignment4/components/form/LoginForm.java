@@ -137,8 +137,13 @@ public class LoginForm {
                 MainApp.addScene("CustomerScene", scene);
                 MainApp.setScene(scene);
             }
-
+            clearTextFields();
         }
+    }
+
+    private void clearTextFields() {
+        nameInput.clear();
+        phoneInput.clear();
     }
 
     public Scene getScene(){
