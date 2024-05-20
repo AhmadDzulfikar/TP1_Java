@@ -7,13 +7,26 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import assignments.assignment3.DepeFood;
 import assignments.assignment3.Menu;
+import assignments.assignment3.Order;
 import assignments.assignment3.Restaurant;
 import assignments.assignment3.User;
+import assignments.assignment3.payment.CreditCardPayment;
+import assignments.assignment3.payment.DebitPayment;
 import assignments.assignment4.MainApp;
 import assignments.assignment4.components.BillPrinter;
 
@@ -22,6 +35,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class CustomerMenu extends MemberMenu {
@@ -31,96 +45,151 @@ public class CustomerMenu extends MemberMenu {
     private Scene printBillScene;
     private Scene payBillScene;
     private Scene cekSaldoScene;
-    private BillPrinter billPrinter;
+    private BillPrinter billPrinter; // Instance of BillPrinter
     private static Label label = new Label();
     private MainApp mainApp;
     private List<Restaurant> restoList = new ArrayList<>();
     private User user;
+    static final Pattern DATE_PATTERN = Pattern.compile("^\\d{2}/\\d{2}/\\d{4}$");  // Pattern for the date
 
     private ListView<String> menuItemListView = new ListView<>();
     private ComboBox<String> restaurantComboBox = new ComboBox<>();
-
     private ComboBox<String> restaurantComboBoxAddOrder = new ComboBox<>();
 
     public CustomerMenu(Stage stage, MainApp mainApp, User user) {
         this.stage = stage;
         this.mainApp = mainApp;
-        this.user = user;
+        this.user = user; // Store the user
         this.scene = createBaseMenu();
         this.addOrderScene = createTambahPesananForm();
-        this.billPrinter = new BillPrinter(stage, mainApp, this.user);
+        this.billPrinter = new BillPrinter(stage, mainApp, this.user); // Pass user to BillPrinter constructor
         this.printBillScene = createBillPrinter();
         this.payBillScene = createBayarBillForm();
         this.cekSaldoScene = createCekSaldoScene();
+        DepeFood.setPenggunaLoggedIn(user); // Set userLoggedIn di DepeFood
     }
 
     @Override
     public Scene createBaseMenu() {
+        // Menampilkan menu untuk Customer
+
+        // Create the layout for the Customer Menu
         VBox menuLayout = new VBox(30);
         menuLayout.setAlignment(Pos.BOTTOM_CENTER);
 
-        HBox buttonLayout = new HBox(130);
-        menuLayout.setPadding(new Insets(0, 0, 40, 0));
+        // Create the horizontal box for buttons
+        HBox buttonLayout = new HBox(50);
+        menuLayout.setPadding(new Insets(0, 20, 30, 20));
         buttonLayout.setAlignment(Pos.BOTTOM_CENTER);
 
-        Button buatPesananPage = new Button("Buat Pesanan");
-        buatPesananPage.setOnAction(e -> stage.setScene(addOrderScene));
+        String currentPath = System.getProperty("user.dir");
 
-        Button cetakBillPage = new Button("Cetak Bill");
-        cetakBillPage.setOnAction(e -> stage.setScene(printBillScene));
+        String imageUrl = "file:" + currentPath + "\\src\\main\\java\\assignments\\assignment4\\images\\MainMenuDua.png";
+        setBackground(menuLayout, imageUrl);
 
-        Button bayarBillPage = new Button("Bayar Bill");
-        bayarBillPage.setOnAction(e -> stage.setScene(payBillScene));
+        // Create buttons
+        Button buatPesananPage = new Button("BUAT PESANAN");
+        buatPesananPage.setPrefSize(200, 30);
+        buatPesananPage.setStyle("-fx-background-color: #3F90AE; -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold;");
+        buatPesananPage.setOnAction(e -> showTambahPesananDialog()); // Menampilkan pop-up dialog
 
-        Button cekSaldoPage = new Button("Cek Saldo");
-        cekSaldoPage.setOnAction(e -> stage.setScene(cekSaldoScene));
+        Button cetakBillPage = new Button("CETAK BILL");
+        cetakBillPage.setPrefSize(200, 30);
+        cetakBillPage.setStyle("-fx-background-color: #3F90AE; -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold;");
+        cetakBillPage.setOnAction(e -> {
+            refresh();
+            stage.setScene(printBillScene);
+        });
 
-        Button backButton = new Button("Log Out");
+        Button bayarBillPage = new Button("BAYAR BILL");
+        bayarBillPage.setPrefSize(200, 30);
+        bayarBillPage.setStyle("-fx-background-color: #3F90AE; -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold;");
+        bayarBillPage.setOnAction(e -> {
+            refresh();
+            stage.setScene(payBillScene);
+        });
+
+        Button cekSaldoPage = new Button("CEK SALDO");
+        cekSaldoPage.setPrefSize(200, 30);
+        cekSaldoPage.setStyle("-fx-background-color: #3F90AE; -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold;");
+        cekSaldoPage.setOnAction(e -> {
+            refresh();
+            stage.setScene(cekSaldoScene);
+        });
+
+        // Logout button
+        Button backButton = new Button("LOG OUT");
+        backButton.setPrefSize(200, 30);
+        backButton.setStyle("-fx-background-color: #FDBD98; -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold;");
         backButton.setOnAction(e -> mainApp.logout());
 
+        // Add buttons to the horizontal box
         buttonLayout.getChildren().addAll(buatPesananPage, cetakBillPage, bayarBillPage, cekSaldoPage, backButton);
 
+        // Add the button layout and logout button to the vertical layout
         menuLayout.getChildren().addAll(buttonLayout);
 
-        return new Scene(menuLayout, 950, 527);
+        // Create the scene with the layout
+        // return new Scene(menuLayout, 950, 527);
+        return new Scene(menuLayout, 940, 527);
+
     }
 
+    public void setBackground(Pane pane, String imageUrl) {
+        Image image = new Image(imageUrl);
+        BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+        Background background = new Background(backgroundImage);
+        pane.setBackground(background);
+    }
+
+    // FITUR KE - 1 -----------------------------------------------------------------------------------------
     private Scene createTambahPesananForm() {
+        // method untuk menampilkan page tambah pesanan
         VBox menuLayout = new VBox(10);
         menuLayout.setPadding(new Insets(20));
 
+        // Input Nama Restoran
         Label restaurantLabel = new Label("Restaurant Name: ");
         restaurantComboBoxAddOrder.setItems(FXCollections.observableArrayList(getRestoNames()));
         restaurantComboBoxAddOrder.setPromptText("Select a restaurant");
 
-        menuItemListView = new ListView<>();
+        // Membuat input tanggal order
+        Label tanggalLabel = new Label("Date (DD/MM/YYYY)");
+        TextField tanggalInput = new TextField();
+        tanggalInput.setPromptText("DD/MM/YYYY");
 
+        // Membuat listview untuk lihat menu
+        menuItemListView = new ListView<>();
         restaurantComboBoxAddOrder.setOnAction(e -> {
             String selectedRestaurant = restaurantComboBoxAddOrder.getValue();
             if (selectedRestaurant != null) {
                 Restaurant restaurant = DepeFood.getRestaurantByName(selectedRestaurant);
                 if (restaurant != null) {
                     List<String> menuItems = restaurant.getMenuItems().stream()
-                        .map(menu -> menu.getNamaMakanan())
-                        .collect(Collectors.toList());
+                            .map(menu -> menu.getNamaMakanan())
+                            .collect(Collectors.toList());
+                    menuItemListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
                     menuItemListView.setItems(FXCollections.observableArrayList(menuItems));
                 }
             }
         });
 
-        // Add a TextField for date input
-        Label dateLabel = new Label("Tanggal Pemesanan (DD/MM/YYYY):");
-        TextField dateInput = new TextField();
-        dateInput.setPromptText("DD/MM/YYYY");
-
-        // Add a button to submit the order
+        // Button buat submit orderannya
         Button submitButton = new Button("Buat Pesanan");
         submitButton.setOnAction(e -> {
-            String tanggalPemesanan = dateInput.getText();
-            if (!isValidDate(tanggalPemesanan)) {
-                showAlert("Error", "Invalid Date Format", "Format tanggal harus format DD/MM/YYYY", AlertType.ERROR);
+            String tanggalPemesanan = tanggalInput.getText();
+
+            if (!DATE_PATTERN.matcher(tanggalPemesanan).matches()) { // Mencocokan input tanggal pemesanan dengan pola, mereturn true jika benar dan sebaliknya, jika false turun kebawah
+                // System.out.println("Masukkan tanggal sesuai format (DD/MM/YYYY) !");
+                showAlert("Error", "Format Invalid", "Format tanggal harus format DD/MM/YYYY", AlertType.ERROR);
                 return;
             }
+
+            // if (!isValidDate(tanggalPemesanan)) {
+            //     showAlert("Error", "Format Invalid", "Format tanggal harus format DD/MM/YYYY", AlertType.ERROR);
+            //     return;
+            // }
 
             String selectedRestaurant = restaurantComboBoxAddOrder.getValue();
             List<String> selectedItems = new ArrayList<>(menuItemListView.getSelectionModel().getSelectedItems());
@@ -128,79 +197,86 @@ public class CustomerMenu extends MemberMenu {
             if (selectedRestaurant != null && !selectedItems.isEmpty()) {
                 handleBuatPesanan(selectedRestaurant, tanggalPemesanan, selectedItems);
             } else {
-                showAlert("Error", "Incomplete Form", "Please select a restaurant and menu items.", AlertType.ERROR);
+                showAlert("Error", "Form Tidak Komplit", "Tolong Pilih Restoran dan menunya!", AlertType.ERROR);
             }
         });
 
-        menuLayout.getChildren().addAll(restaurantLabel, restaurantComboBoxAddOrder, menuItemListView, dateLabel, dateInput, submitButton);
+        menuLayout.getChildren().addAll(restaurantLabel, restaurantComboBoxAddOrder, tanggalLabel, tanggalInput, new Label("Select Menu Items:"), menuItemListView, submitButton);
 
-        Button backButton = new Button("Kembali");
-        backButton.setOnAction(e -> stage.setScene(scene));
-        menuLayout.getChildren().add(backButton);
-
-        return new Scene(menuLayout, 400, 600);
+        return new Scene(menuLayout, 300, 400);
     }
 
-    private boolean isValidDate(String date) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        dateFormat.setLenient(false);
-        try {
-            dateFormat.parse(date);
-            return true;
-        } catch (ParseException e) {
-            return false;
-        }
-    }
-
-    private void handleBuatPesanan(String namaRestoran, String tanggalPemesanan, List<String> menuItems) {
-        // Implementasi logika pembuatan pesanan
-        String orderId = DepeFood.handleBuatPesanan(namaRestoran, tanggalPemesanan, menuItems.size(), menuItems);
-        if (orderId != null) {
-            showAlert("Success", "Order Created", "Pesanan berhasil dibuat dengan ID: " + orderId, AlertType.INFORMATION);
-        } else {
-            showAlert("Error", "Order Failed", "Gagal membuat pesanan. Coba lagi.", AlertType.ERROR);
-        }
-    }
-
-    private Scene createBillPrinter(){
-        // TODO: Implementasikan method ini untuk menampilkan page cetak bill
-
-        return null;
-    }
-
-    private Scene createBayarBillForm() {
-        // TODO: Implementasikan method ini untuk menampilkan page bayar bill
-        VBox menuLayout = new VBox(10);
-
-        return new Scene(menuLayout, 400,600);
-    }
-
-    private Scene createCekSaldoScene() {
-        // TODO: Implementasikan method ini untuk menampilkan page cetak saldo
-        VBox menuLayout = new VBox(10);
-
-        return new Scene(menuLayout, 400,600);
-    }
-
-    private void updateComboBoxRestaurants() {
-        List<String> restaurantNames = getRestoNames();
-        restaurantComboBoxAddOrder.setItems(FXCollections.observableArrayList(restaurantNames));
-        restaurantComboBoxAddOrder.setPromptText("Select a restaurant");
+    private void showTambahPesananDialog() {
+        Stage dialog = new Stage();
+        dialog.initModality(Modality.WINDOW_MODAL);
+        dialog.initOwner(stage);
+        Scene dialogScene = createTambahPesananForm();
+        dialog.setScene(dialogScene);
+        dialog.setTitle("Buat Pesanan");
+        dialog.showAndWait();
     }
 
     private List<String> getRestoNames() {
-        return DepeFood.getRestoList().stream().map(Restaurant::getNama).collect(Collectors.toList());
+        return DepeFood.getRestaurants().stream()
+                .map(Restaurant::getName)
+                .collect(Collectors.toList());
     }
 
-    protected void showAlert(String title, String header, String content, Alert.AlertType c) {
-        Alert alert = new Alert(c);
+    private void handleBuatPesanan(String restaurantName, String tanggalPemesanan, List<String> menuItems) {
+        Restaurant selectedRestaurant = DepeFood.getRestaurantByName(restaurantName);
+        if (selectedRestaurant != null) {
+            List<Menu> menus = selectedRestaurant.getMenuItems().stream()
+                    .filter(menu -> menuItems.contains(menu.getNamaMakanan()))
+                    .collect(Collectors.toList());
+
+            if (!menus.isEmpty()) {
+                Order newOrder = new Order(DepeFood.getPenggunaLoggedIn(), selectedRestaurant, tanggalPemesanan, menus);
+                DepeFood.addOrder(newOrder);
+                showAlert("Success", "Order Created", "Order anda berhasil dibuat!", AlertType.INFORMATION);
+            } else {
+                showAlert("Error", "Order Failed", "Tidak dapat menemukan menu yang dipilih!", AlertType.ERROR);
+            }
+        }
+    }
+
+    private void showAlert(String title, String header, String content, AlertType alertType) {
+        Alert alert = new Alert(alertType);
         alert.setTitle(title);
         alert.setHeaderText(header);
         alert.setContentText(content);
         alert.showAndWait();
     }
 
-    protected void refresh(){
-        // TODO: Implemenetasi method ini untuk merefresh data yang dimiliki aplikasi
+    private boolean isValidDate(String dateStr) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        sdf.setLenient(false);
+        try {
+            sdf.parse(dateStr);
+        } catch (ParseException e) {
+            return false;
+        }
+        return true;
     }
+
+    private void refresh() {
+        // Refresh method content if needed
+    }
+
+    // FITUR KE - 2 -----------------------------------------------------------------------------------------
+    private Scene createBillPrinter() {
+        return billPrinter.createBillPrinter();
+    }
+
+    // FITUR KE - 3 -----------------------------------------------------------------------------------------
+    private Scene createBayarBillForm() {
+        // Implementasi metode ini dengan form pembayaran
+        return new Scene(new Pane(), 300, 200); // Placeholder
+    }
+
+    // FITUR KE - 4 -----------------------------------------------------------------------------------------
+    private Scene createCekSaldoScene() {
+        // Implementasi metode ini dengan form cek saldo
+        return new Scene(new Pane(), 300, 200); // Placeholder
+    }
+
 }

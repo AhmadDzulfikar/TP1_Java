@@ -20,7 +20,9 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -42,56 +44,61 @@ public class LoginForm {
     public LoginForm(Stage stage, MainApp mainApp) { // Pass MainApp instance to constructor
         this.stage = stage;
         this.mainApp = mainApp; // Store MainApp instance
+        this.stage.setResizable(false);
     }
 
     private Scene createLoginForm() {
         // Implementasi method menampilkan komponen form login
-        GridPane grid = new GridPane();
-
-        grid.setAlignment(Pos.CENTER);
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new Insets(25, 25, 25, 25));
+        VBox vbox = new VBox(20);
+        vbox.setAlignment(Pos.CENTER);
+        vbox.setPadding(new Insets(25, 25, 25, 50));
 
         String currentPath = System.getProperty("user.dir");
-
-        String imageUrl = "file:" + currentPath + "\\src\\main\\java\\assignments\\assignment4\\images\\haiyya2.png";
-        setBackground(grid, imageUrl);
-
-        Label welcomeLabel = new Label("Welcome to DepeFood");
-        welcomeLabel.setFont(Font.font("Arial", FontWeight.BOLD, 20)); // Set font size and style
-        grid.add(welcomeLabel, 0, 0, 2, 1); // Spanning two columns
+        String imageUrl = "file:" + currentPath + "\\src\\main\\java\\assignments\\assignment4\\images\\LoginPageSatu.png";
+        setBackground(vbox, imageUrl);
 
         // Username
-        Label namLabel = new Label("Username: ");
-        grid.add(namLabel, 0, 1);
-
+        HBox nameBox = new HBox(30);
+        nameBox.setAlignment(Pos.CENTER_LEFT);
         nameInput = new TextField(); 
-        nameInput.setPromptText("Ex. Thomas N");
-        grid.add(nameInput, 1, 1);
+        nameInput.setPromptText("Username");
+        nameInput.setPrefSize(300, 40); // Set size for TextField
+        nameInput.setFont(Font.font("Arial", FontWeight.NORMAL, 16)); // Set font size for TextField
+        nameInput.setStyle("-fx-background-radius: 10; -fx-border-radius: 10;");
+        nameBox.getChildren().addAll(nameInput);
 
         // No Telp
-        Label phonLabel = new Label("Phone: ");
-        grid.add(phonLabel, 0, 2);
-
+        HBox phoneBox = new HBox(30);
+        phoneBox.setAlignment(Pos.CENTER_LEFT);
         phoneInput = new TextField();
-        phoneInput.setPromptText("Ex. 9928765403");
-        grid.add(phoneInput, 1, 2);
+        phoneInput.setPromptText("No. Telp");
+        phoneInput.setPrefSize(300, 40); // Set size for TextField
+        phoneInput.setFont(Font.font("Arial", FontWeight.NORMAL, 16)); // Set font size for TextField
+        phoneInput.setStyle("-fx-background-radius: 10; -fx-border-radius: 10;");
+        phoneBox.getChildren().addAll(phoneInput);
 
         // Button Login
+        HBox loginBox = new HBox(30);
+        loginBox.setAlignment(Pos.CENTER_LEFT);
         Button loginButton = new Button("Login");
+        loginButton.setPrefSize(300, 40); // Set size for Button
+        loginButton.setFont(Font.font("Arial", FontWeight.BOLD, 16)); // Set font size for Button
+        loginButton.setStyle("-fx-background-color: #FDBD98; -fx-background-radius: 10; -fx-border-radius: 10; -fx-text-fill: white;");
+        loginBox.getChildren().addAll(loginButton);
         loginButton.setOnAction(e -> handleLogin());
-        grid.add(loginButton, 1, 3);
 
-        return new Scene(grid, 400, 600);
+        // Add all components to vbox
+        vbox.getChildren().addAll(nameBox, phoneBox, loginBox);
+
+        return new Scene(vbox, 940, 527);
     }
 
-    public void setBackground(Pane grid, String imageUrl) {
+    public void setBackground(Pane pane, String imageUrl) {
         Image image = new Image(imageUrl);
         BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, 
                                                             BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
         Background background = new Background(backgroundImage);
-        grid.setBackground(background);
+        pane.setBackground(background);
     }
 
     private void handleLogin() {

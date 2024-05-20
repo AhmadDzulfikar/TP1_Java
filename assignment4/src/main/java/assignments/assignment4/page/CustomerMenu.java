@@ -7,10 +7,18 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import assignments.assignment3.DepeFood;
 import assignments.assignment3.Menu;
@@ -54,7 +62,7 @@ public class CustomerMenu extends MemberMenu{
         this.mainApp = mainApp;
         this.user = user; // Store the user
         this.scene = createBaseMenu();
-        this.addOrderScene = createTambahPesananForm();
+        this.addOrderScene = createTambahPesananForm(new Stage());
         this.billPrinter = new BillPrinter(stage, mainApp, this.user); // Pass user to BillPrinter constructor
         this.printBillScene = createBillPrinter();
         this.payBillScene = createBayarBillForm();
@@ -71,37 +79,53 @@ public class CustomerMenu extends MemberMenu{
         menuLayout.setAlignment(Pos.BOTTOM_CENTER);
 
         // Create the horizontal box for buttons
-        HBox buttonLayout = new HBox(0);
-        menuLayout.setPadding(new Insets(0, 0, 40, 0));
+        HBox buttonLayout = new HBox(50);
+        menuLayout.setPadding(new Insets(0, 20, 30, 20));
         buttonLayout.setAlignment(Pos.BOTTOM_CENTER);
 
+        String currentPath = System.getProperty("user.dir");
+
+        String imageUrl = "file:" + currentPath + "\\src\\main\\java\\assignments\\assignment4\\images\\MainMenuDua.png";
+        setBackground(menuLayout, imageUrl);
+
         // Create buttons
-        Button buatPesananPage = new Button("Buat Pesanan");
+        Button buatPesananPage = new Button("BUAT PESANAN");
+        buatPesananPage.setPrefSize(200, 30);
+        buatPesananPage.setStyle("-fx-background-color: #3F90AE; -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold;");
         buatPesananPage.setOnAction(e -> {
             refresh();
-            stage.setScene(addOrderScene);
+            // stage.setScene(addOrderScene);
+            showTambahPesananDialog();
         });
 
-        Button cetakBillPage = new Button("Cetak Bill");
+        Button cetakBillPage = new Button("CETAK BILL");
+        cetakBillPage.setPrefSize(200, 30);
+        cetakBillPage.setStyle("-fx-background-color: #3F90AE; -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold;");
         cetakBillPage.setOnAction(e -> {
             refresh();
             stage.setScene(printBillScene);
         });
 
-        Button bayarBillPage = new Button("Bayar Bill");
+        Button bayarBillPage = new Button("BAYAR BILL");
+        bayarBillPage.setPrefSize(200, 30);
+        bayarBillPage.setStyle("-fx-background-color: #3F90AE; -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold;");
         bayarBillPage.setOnAction(e -> {
             refresh();
             stage.setScene(payBillScene);
         });
 
-        Button cekSaldoPage = new Button("Cek Saldo");
+        Button cekSaldoPage = new Button("CEK SALDO");
+        cekSaldoPage.setPrefSize(200, 30);
+        cekSaldoPage.setStyle("-fx-background-color: #3F90AE; -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold;");
         cekSaldoPage.setOnAction(e -> {
             refresh();
             stage.setScene(cekSaldoScene);
         });
 
         // Logout button
-        Button backButton = new Button("Log Out");
+        Button backButton = new Button("LOG OUT");
+        backButton.setPrefSize(200, 30);
+        backButton.setStyle("-fx-background-color: #FDBD98; -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold;");
         backButton.setOnAction(e -> mainApp.logout());
 
         // Add buttons to the horizontal box
@@ -112,12 +136,20 @@ public class CustomerMenu extends MemberMenu{
 
         // Create the scene with the layout
         // return new Scene(menuLayout, 950, 527);
-        return new Scene(menuLayout, 400, 600);
+        return new Scene(menuLayout, 940, 527);
 
     }
 
+    public void setBackground(Pane pane, String imageUrl) {
+        Image image = new Image(imageUrl);
+        BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, 
+                                                            BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+        Background background = new Background(backgroundImage);
+        pane.setBackground(background);
+    }
+
 // FITUR KE - 1 -----------------------------------------------------------------------------------------
-    private Scene createTambahPesananForm() {
+    private Scene createTambahPesananForm(Stage dialogStage) {
         // method untuk menampilkan page tambah pesanan
         VBox menuLayout = new VBox(10);
         menuLayout.setPadding(new Insets(20));
@@ -158,12 +190,6 @@ public class CustomerMenu extends MemberMenu{
                 showAlert("Error", "Format Invalid", "Format tanggal harus format DD/MM/YYYY", AlertType.ERROR);
                 return;
             }
-
-            // if (!isValidDate(tanggalPemesanan)) {
-            //     showAlert("Error", "Format Invalid", "Format tanggal harus format DD/MM/YYYY", AlertType.ERROR);
-            //     return;
-            // }
-
             String selectedRestaurant = restaurantComboBoxAddOrder.getValue();
             List<String> selectedItems = new ArrayList<>(menuItemListView.getSelectionModel().getSelectedItems());
 
@@ -177,22 +203,21 @@ public class CustomerMenu extends MemberMenu{
         menuLayout.getChildren().addAll(restaurantLabel, restaurantComboBoxAddOrder, tanggalLabel, tanggalInput,menuItemListView, submitButton);
 
         Button backButton = new Button("Kembali");
-        backButton.setOnAction(e -> stage.setScene(scene));
+        backButton.setOnAction(e -> dialogStage.close());
         menuLayout.getChildren().add(backButton);
 
         return new Scene(menuLayout, 400, 600);
     }
 
-    // private boolean isValidDate(String date) {
-    //     SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-    //     dateFormat.setLenient(false);
-    //     try {
-    //         dateFormat.parse(date);
-    //         return true;
-    //     } catch (ParseException e) {
-    //         return false;
-    //     }
-    // }
+    private void showTambahPesananDialog() {
+        Stage dialog = new Stage();
+        dialog.initModality(Modality.WINDOW_MODAL);
+        dialog.initOwner(stage);
+        Scene dialogScene = createTambahPesananForm(dialog);
+        dialog.setScene(dialogScene);
+        dialog.setTitle("Buat Pesanan");
+        dialog.showAndWait();
+    }
 
 // FITUR KE - 2 -----------------------------------------------------------------------------------------
     private Scene createBillPrinter() {
@@ -224,7 +249,7 @@ public class CustomerMenu extends MemberMenu{
     
         layout.getChildren().addAll(orderIdTitle, orderIdInput, submitButton, backButton);
     
-        return new Scene(layout, 400, 300);
+        return new Scene(layout, 940, 527);
     }
     
     private void showBill(Order order) {
@@ -262,7 +287,7 @@ public class CustomerMenu extends MemberMenu{
                 pesananTitleLabel, pesananList, ongkirLabel, totalBiayaLabel, backButton
         );
     
-        Scene billScene = new Scene(billLayout, 400, 600);
+        Scene billScene = new Scene(billLayout, 942, 527);
         stage.setScene(billScene);
     }
 
@@ -338,7 +363,7 @@ private Scene createBayarBillForm() {
     backButton.setOnAction(e -> stage.setScene(scene));
 
     menuLayout.getChildren().addAll(orderIdLabel, orderIdInput, paymentOptionLabel, paymentOptionComboBox, submitButton, backButton);
-    return new Scene(menuLayout, 400, 300);
+    return new Scene(menuLayout, 940, 527);
 }
 
 // FITUR KE - 4 -----------------------------------------------------------------------------------------
@@ -425,7 +450,7 @@ private Scene createBayarBillForm() {
 
         // refresh tambah pesanan
         restaurantComboBoxAddOrder.getSelectionModel().clearSelection();
-        this.addOrderScene = createTambahPesananForm();
+        this.addOrderScene = createTambahPesananForm(new Stage());
 
         // refresh print bill
         this.printBillScene = createBillPrinter();
