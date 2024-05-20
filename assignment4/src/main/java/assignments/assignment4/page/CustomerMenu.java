@@ -76,17 +76,16 @@ public class CustomerMenu extends MemberMenu{
 
     @Override
     public Scene createBaseMenu() {
-        // Menampilkan menu untuk Customer
-
-        // Create the layout for the Customer Menu
+        // membuat the layout for the Customer Menu
         VBox menuLayout = new VBox(30);
         menuLayout.setAlignment(Pos.BOTTOM_CENTER);
 
-        // Create the horizontal box for buttons
+        // Membuat horizontal box untuk buttons
         HBox buttonLayout = new HBox(50);
         menuLayout.setPadding(new Insets(0, 20, 30, 20));
         buttonLayout.setAlignment(Pos.BOTTOM_CENTER);
 
+        // Source untuk menampilkan gambar
         String currentPath = System.getProperty("user.dir");
 
         String imageUrl = "file:" + currentPath + "\\src\\main\\java\\assignments\\assignment4\\images\\MainMenuDua.png";
@@ -136,10 +135,10 @@ public class CustomerMenu extends MemberMenu{
         // backButton.setOnAction(e -> mainApp.logout());
         backButton.setOnAction(e -> showLogoutDialog());
 
-        // Add buttons to the horizontal box
+        // Tambah buttons untuk horizontal box
         buttonLayout.getChildren().addAll(buatPesananPage, cetakBillPage, bayarBillPage, cekSaldoPage, backButton);
 
-        // Add the button layout and logout button to the vertical layout
+        // Tambah button layout dan logout button ke vertical layout
         menuLayout.getChildren().addAll(buttonLayout);
 
         // Create the scene with the layout
@@ -148,6 +147,7 @@ public class CustomerMenu extends MemberMenu{
 
     }
 
+    // Untuk menampilkan backgroundnya
     public void setBackground(Pane pane, String imageUrl) {
         Image image = new Image(imageUrl);
         BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, 
@@ -157,6 +157,7 @@ public class CustomerMenu extends MemberMenu{
     }
 
 // FITUR KE - 1 -----------------------------------------------------------------------------------------
+    // Membuat pesanan
     private Scene createTambahPesananForm(Stage dialogStage) {
         // method untuk menampilkan page tambah pesanan
         VBox menuLayout = new VBox(10);
@@ -199,6 +200,7 @@ public class CustomerMenu extends MemberMenu{
         submitButton.setOnAction(e -> {
             String tanggalPemesanan = tanggalInput.getText();
 
+            // Validasi tanggal
             if (!DATE_PATTERN.matcher(tanggalPemesanan).matches()) { // Mencocokan input tanggal pemesanan dengan pola, mereturn true jika benar dan sebaliknya, jika false turun kebawah
                 showAlert("Error", "Format Invalid", "Format tanggal harus format DD/MM/YYYY", AlertType.ERROR);
                 return;
@@ -215,6 +217,7 @@ public class CustomerMenu extends MemberMenu{
 
         menuLayout.getChildren().addAll(restaurantLabel, restaurantComboBoxAddOrder, tanggalLabel, tanggalInput,menuItemListView, submitButton);
 
+        // kembali
         Button backButton = new Button("Kembali");
         backButton.setPrefSize(100, 0); // Atur tinggi dan lebar tombol
         backButton.setStyle("-fx-background-color: #FDBD98; -fx-text-fill: white;"); // Set warna latar belakang dan teks tombol
@@ -224,6 +227,7 @@ public class CustomerMenu extends MemberMenu{
         return new Scene(menuLayout, 400, 600);
     }
 
+    // Membuat sebuah dialog or pop up
     private void showTambahPesananDialog() {
         Stage dialog = new Stage();
         dialog.initModality(Modality.WINDOW_MODAL);
@@ -235,6 +239,7 @@ public class CustomerMenu extends MemberMenu{
     }
 
 // FITUR KE - 2 -----------------------------------------------------------------------------------------
+    // Membuat print bill untuk pesanan
     private Scene createBillPrinter(Stage dialogStage) {
         VBox layout = new VBox(10);
         layout.setPadding(new Insets(20));
@@ -249,7 +254,7 @@ public class CustomerMenu extends MemberMenu{
 
         // Button untuk submit orderId
         Button submitButton = new Button("Print Bill");
-        submitButton.setPrefSize(200, 0); // Atur tinggi dan lebar tombol
+        submitButton.setPrefSize(800, 0); // Atur tinggi dan lebar tombol
         submitButton.setStyle("-fx-background-color: #3F90AE; -fx-text-fill: white; -fx-font-size: 15px;");
         submitButton.setOnAction(e -> {
             String orderId = orderIdInput.getText();
@@ -272,6 +277,7 @@ public class CustomerMenu extends MemberMenu{
         return new Scene(layout, 400, 600);
     }
 
+    // Membuat sebuah pop up untuk createBill
     private void showTcreateBillPrinterDialog() {
         printBillDialogStage = new Stage();
         printBillDialogStage.initModality(Modality.WINDOW_MODAL);
@@ -281,7 +287,8 @@ public class CustomerMenu extends MemberMenu{
         printBillDialogStage.setTitle("Cetak Bill");
         printBillDialogStage.showAndWait();
     }
-    
+
+    // Tampilan dari bill-nya
     private void showBill(Order order) {
         // Membuat layout untuk menampilkan bill
         VBox billLayout = new VBox(10);
@@ -318,7 +325,8 @@ public class CustomerMenu extends MemberMenu{
         ongkirLabel.setTextFill(Color.WHITE);
         Label totalBiayaLabel = new Label("Total Biaya: Rp " + (int)order.getTotalHarga());
         totalBiayaLabel.setTextFill(Color.WHITE);
-    
+
+        // Kembali
         Button backButton = new Button("Kembali");
         backButton.setPrefSize(800, 0); // Atur tinggi dan lebar tombol
         backButton.setStyle("-fx-background-color: #FDBD98; -fx-text-fill: white;"); // Set warna latar belakang dan teks tombol
@@ -338,6 +346,7 @@ public class CustomerMenu extends MemberMenu{
     }
 
 // FITUR KE - 3 -----------------------------------------------------------------------------------------
+// Fitur untuk membayar bill-nya
 private Scene createBayarBillForm(Stage dialogStage) {
     VBox menuLayout = new VBox(10);
     menuLayout.setPadding(new Insets(20));
@@ -365,6 +374,7 @@ private Scene createBayarBillForm(Stage dialogStage) {
     submitButton.setOnAction(e -> {
         String orderId = orderIdInput.getText();
         String paymentOption = paymentOptionComboBox.getValue();
+        // Validasi kalau kosong pilihannya
         if (orderId.isEmpty() || paymentOption == null) {
             showAlert("Error", "Form Tidak Komplit", "Tolong masukkan Order ID dan pilih metode pembayaran!", AlertType.ERROR);
             return;
@@ -385,6 +395,7 @@ private Scene createBayarBillForm(Stage dialogStage) {
         double biayaTransaksi = totalBiaya * 0.02;
         double totalPembayaran = totalBiaya + biayaTransaksi;
         
+        // Pilihan dari metode pembayaran
         if (paymentOption.equals("Credit Card") || paymentOption.equals("Debit")) {
                 if (paymentOption.equals("Credit Card") && !(user.getPaymentSystem() instanceof CreditCardPayment) ||
                     paymentOption.equals("Debit") && !((user.getPaymentSystem() instanceof DebitPayment))) {
@@ -394,6 +405,7 @@ private Scene createBayarBillForm(Stage dialogStage) {
                 }
             }
 
+            // Khusus debit gabisa dibawah 50rb
         if (paymentOption.equals("Debit")) {
             if (totalBiaya < 50000) {
                 showAlert("Error", "Jumlah Pesanan Tidak Mencukupi", "Jumlah pesanan < 50000 mohon menggunakan metode pembayaran yang lain", AlertType.ERROR);
@@ -419,6 +431,7 @@ private Scene createBayarBillForm(Stage dialogStage) {
     return new Scene(menuLayout, 400, 600);
 }
 
+// Pop up-nya
 private void showccreateBayarBillFormDialog() {
     printBillDialogStage = new Stage();
     printBillDialogStage.initModality(Modality.WINDOW_MODAL);
@@ -430,6 +443,7 @@ private void showccreateBayarBillFormDialog() {
 }
 
 // FITUR KE - 4 -----------------------------------------------------------------------------------------
+// Untuk cek saldo si user
     private Scene createCekSaldoScene(Stage dialogStage) {
         // Method ini untuk menampilkan page cetak saldo
         VBox menuLayout = new VBox(10);
@@ -480,6 +494,7 @@ private void showccreateBayarBillFormDialog() {
         dialog.showAndWait();
     }
 
+    // Handling handling
     private void handleBuatPesanan(String namaRestoran, String tanggalPemesanan, List<String> menuItems) {
         String orderId = DepeFood.handleBuatPesanan(namaRestoran, tanggalPemesanan, menuItems.size(), menuItems);
         if (orderId != null) {
@@ -498,15 +513,16 @@ private void showccreateBayarBillFormDialog() {
         }
     }
 
-    private void handleBayarBill(String orderID, int pilihanPembayaran) {
-        //TODO: Implementasi validasi pembayaran
-        try {
+    // private void handleBayarBill(String orderID, int pilihanPembayaran) {
+    //     //TODO: Implementasi validasi pembayaran
+    //     try {
 
-        } catch (Exception e) {
+    //     } catch (Exception e) {
 
-        }
-    }
+    //     }
+    // }
 
+    // Combobox
     private void updateComboBoxRestaurants() {
         List<String> restaurantNames = getRestoNames();
         restaurantComboBoxAddOrder.setItems(FXCollections.observableArrayList(restaurantNames));
@@ -517,6 +533,7 @@ private void showccreateBayarBillFormDialog() {
         return DepeFood.getRestoList().stream().map(Restaurant::getNama).collect(Collectors.toList());
     }
 
+    // Show alert
     protected void showAlert(String title, String header, String content, Alert.AlertType c) {
         Alert alert = new Alert(c);
         alert.setTitle(title);
@@ -525,6 +542,7 @@ private void showccreateBayarBillFormDialog() {
         alert.showAndWait();
     }
 
+    // Untuk menampilkan logout dialognya/ pop-upnya
     private void showLogoutDialog() {
         Alert alert = new Alert(AlertType.CONFIRMATION);
         alert.setTitle("Logout Confirmation");
@@ -544,6 +562,7 @@ private void showccreateBayarBillFormDialog() {
         });
     }
 
+    // refresh
     // FITUR REFRESH -----------------------------------------------------------------------------------------
     protected void refresh(){
         updateComboBoxRestaurants(); // Refresh the combo box items with the latest restaurant names
